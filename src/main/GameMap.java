@@ -18,7 +18,10 @@ public class GameMap {
 
         cells = new Cell[width][length];
 
-        lockedPoints.add(new Point(0,0));
+        //Agent
+        Point agentPos = new Point(0,length-1);
+        cells[0][length-1] = new Cell(agentPos,1);
+        lockedPoints.add(agentPos);
 
         // Wumpus
         Point posWumpus = generatePoint(width, length, lockedPoints);
@@ -33,7 +36,6 @@ public class GameMap {
         // Pit
         // RANDOM INT BETWEEN 1 & 20% of the number of cells
         int maxNumberOfPits = (int) Math.round(w*l*0.20);
-//        int minNumberOfPits = (int) Math.round(w*l*0.10);
         int randomNumberOfPits = generateRandom(maxNumberOfPits);
         for(int i = 0; i < randomNumberOfPits; i++){
             Point posPit = generatePoint(width, length, lockedPoints);
