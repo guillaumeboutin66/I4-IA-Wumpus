@@ -1,11 +1,12 @@
+import java.awt.*;
+
 public class Cell {
 
-    // todo : abstract
-    int x;
-    int y;
+    Point position;
+    int danger;
 
-    // todo : put a number ?
-    Cell(int x, int y, String severity){
-
+    Cell(Point pos, int d){
+        position = pos;
+        danger = d;
     }
 }
