@@ -11,4 +11,9 @@ public class Cell {
         position = pos;
         danger = d;
     }
+
+    @Override
+    public String toString(){
+        return "["+this.position.x+", "+this.position.y+", danger : "+this.danger+"]";
+    }
 }

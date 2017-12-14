@@ -6,12 +6,20 @@ import main.GameMap;
 public class GameMapTest{
 
     public void main(String[] args) {
-        testCreationMap();
+        try {
+            testCreationMap();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @org.junit.Test
-    public final void testCreationMap(){
+    public final void testCreationMap() throws Exception{
         GameMap gmt = new GameMap(10, 10);
-        System.out.println(gmt.toString());
+        for(int i = 0; i < gmt.getWidth(); i++){
+            for(int j = 0; j < gmt.getLength(); j++) {
+                System.out.println(gmt.getCells()[i][j].toString());
+            }
+        }
     }
 }

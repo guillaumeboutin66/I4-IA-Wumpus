@@ -18,15 +18,36 @@ public class GameMap {
 
         cells = new Cell[width][length];
 
-        //Wumpus
+        lockedPoints.add(new Point(0,0));
+
+        // Wumpus
         Point posWumpus = generatePoint(width, length, lockedPoints);
         cells[posWumpus.x][posWumpus.y] = new Cell(posWumpus,1000);
         lockedPoints.add(posWumpus);
 
-        //Gold
+        // Gold
         Point posGold = generatePoint(width, length, lockedPoints);
-        cells[posGold.x][posGold.y] = new Cell(posGold,1000);
+        cells[posGold.x][posGold.y] = new Cell(posGold,100);
         lockedPoints.add(posWumpus);
+
+        // Pit
+        // RANDOM INT BETWEEN 1 & 20% of the number of cells
+        int maxNumberOfPits = (int) Math.round(w*l*0.20);
+//        int minNumberOfPits = (int) Math.round(w*l*0.10);
+        int randomNumberOfPits = generateRandom(maxNumberOfPits);
+        for(int i = 0; i < randomNumberOfPits; i++){
+            Point posPit = generatePoint(width, length, lockedPoints);
+            cells[posPit.x][posPit.y] = new Cell(posPit,100);
+            lockedPoints.add(posPit);
+        }
+
+        for(int i = 0; i < width; i++){
+            for(int j = 0; j < length; j++) {
+                if(cells[i][j] == null){
+                    cells[i][j] = new Cell(new Point(i,j),0);
+                }
+            }
+        }
 
     }
 
@@ -51,6 +72,22 @@ public class GameMap {
     }
 
     private int generateRandom(int Max){
-        return (int) Math.round(1 + (Math.random() * (Max - 1)));
+        return (int) Math.round((Math.random() * (Max - 1)));
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    public Cell[][] getCells() {
+        return cells;
+    }
+
+    public ArrayList<Point> getLockedPoints() {
+        return lockedPoints;
     }
 }
