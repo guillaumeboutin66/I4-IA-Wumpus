@@ -1,5 +1,8 @@
+package main;
+
+import main.Cell;
+
 import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class GameMap {
@@ -9,11 +12,11 @@ public class GameMap {
     private Cell[][] cells;
     private ArrayList<Point> lockedPoints = new ArrayList<Point>();
 
-    GameMap(int w, int l){
+    public GameMap(int w, int l){
         width = w;
         length = l;
 
-        cells = new Cell[getWidth()][getLength()];
+        cells = new Cell[width][length];
 
         //Wumpus
         Point posWumpus = generatePoint(width, length, lockedPoints);
@@ -25,14 +28,6 @@ public class GameMap {
         cells[posGold.x][posGold.y] = new Cell(posGold,1000);
         lockedPoints.add(posWumpus);
 
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getLength() {
-        return length;
     }
 
     private Point generatePoint(int maxWidth, int maxLength, ArrayList<Point> avoidPoints){
