@@ -1,4 +1,4 @@
-package testagent;
+package main;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -9,13 +9,18 @@ package testagent;
  *
  * @author Erik
  */
+
+
+import java.awt.*;
+import java.util.ArrayList;
+
 public class Agent extends Cell {
 
     private boolean Shoot;
     private int Direction;
 
-    public Agent(int x, int y, int danger) {
-        super(x, y, danger);
+    public Agent(Point p, int danger) {
+        super(p, danger);
         
         this.Direction = 90;
         this.Shoot = true;
@@ -28,13 +33,13 @@ public class Agent extends Cell {
         
         switch(CurrentDirection){
             
-            case 0: this.x +=1;
+            case 0: this.position.x +=1;
                      break;
-            case 90:  this.y +=1;
+            case 90: this.position.y +=1;
                       break;
-            case 180: this.x -=1;
+            case 180: this.position.x -=1;
                      break;
-            case 270: this.y -=1;
+            case 270: this.position.y -=1;
                      break;
             default: System.out.println("Invalid direction"); 
                      break;
@@ -80,13 +85,13 @@ public class Agent extends Cell {
         
         switch(CurrentDirection){
             
-            case 0:   if(this.y == monster.y && monster.x > this.x){ this.setShoot(false); return true;};
+            case 0:   if(this.position.y == monster.position.y && monster.position.x > this.position.x){ this.setShoot(false); return true;};
                      break;
-            case 90:  if(this.x == monster.x && monster.y > this.y){ this.setShoot(false); return true;};
+            case 90:  if(this.position.x == monster.position.x && monster.position.y > this.position.y){ this.setShoot(false); return true;};
                      break;
-            case 180: if(this.y == monster.y && monster.x < this.x){ this.setShoot(false); return true;};
+            case 180: if(this.position.y == monster.position.y && monster.position.x < this.position.x){ this.setShoot(false); return true;};
                      break;
-            case 270: if(this.x == monster.x && monster.y < this.y){ this.setShoot(false); return true;};
+            case 270: if(this.position.x == monster.position.x && monster.position.y < this.position.y){ this.setShoot(false); return true;};
                      break;
             default: System.out.println("Invalid direction"); 
                      break;

@@ -92,4 +92,12 @@ public class GameMap {
     public ArrayList<Point> getLockedPoints() {
         return lockedPoints;
     }
+
+    public Agent getAgent(){
+        return null;
+    }
+
+    public Wumpus getWumpus(){
+        return null;
+    }
 }

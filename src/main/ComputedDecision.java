@@ -13,11 +13,11 @@ public class ComputedDecision {
     int positionX =  0;
     int positionY = tableau[0].length;
 
-    /*
+
     private Direction TakeRandomDecision(ArrayList<SafeLevel> levels){
         int rand =  randomPeer.nextInt(4);
         return Direction.values()[rand];
-    }*/
+    }
 
     public Direction ComputedDecision(){
 
