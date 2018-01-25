@@ -1,3 +1,4 @@
+package main;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -7,8 +8,8 @@ import java.util.Random;
 public class ComputedDecision {
 
     Random randomPeer = new Random();
-    Case[][] knownCases = new Case[10][10];
-    Case[][] tableau = new Case[10][10];
+    Cell[][] knownCases = new Cell[10][10];
+    Cell[][] tableau = new Cell[10][10];
     int positionX =  0;
     int positionY = tableau[0].length;
 
@@ -30,7 +31,7 @@ public class ComputedDecision {
 
 
 
-
+        return null;
         //return TakeRandomDecision();
     }
 
@@ -43,7 +44,7 @@ public class ComputedDecision {
             return  SafeLevel.notReachable;
         }
         try{//Le try permet de s'assurer que si on tape dans
-            Case tmp = knownCases[x][knownCases[0].length -y];
+            Cell tmp = knownCases[x][knownCases[0].length -y];
             if(tmp!= null){
                 if(tmp.getEvents().size() == 0){
                     return SafeLevel.safe;

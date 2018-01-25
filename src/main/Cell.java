@@ -1,9 +1,11 @@
 package main;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class Cell {
 
+    private ArrayList<Event> events = new ArrayList<>();
     Point position;
     int danger;
 
@@ -15,5 +17,17 @@ public class Cell {
     @Override
     public String toString(){
         return "["+this.position.x+", "+this.position.y+", danger : "+this.danger+"]";
+    }
+
+
+    public ArrayList<Event> getEvents(){
+        return events;
+    }
+
+
+    public enum Event{
+        smell,
+        wind,
+        empty
     }
 }

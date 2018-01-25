@@ -1,3 +1,4 @@
+package main;
 /**
  * Created by Azuro on 14/12/2017.
  */
@@ -7,8 +8,5 @@ public class SuspiciousCell {
 
     public SuspiciousCell(ComputedDecision.Direction _direction, ComputedDecision.SafeLevel _safeLevel){
         direction = _direction;
-
     }
-
-
 }
