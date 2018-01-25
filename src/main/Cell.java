@@ -27,7 +27,6 @@ public class Cell {
 
     public enum Event{
         smell,
-        wind,
-        empty
+        wind
     }
 }

@@ -1,4 +1,5 @@
 package main;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -7,40 +8,40 @@ import java.util.Random;
  */
 public class ComputedDecision {
 
+
     Random randomPeer = new Random();
-    Cell[][] knownCases = new Cell[10][10];
-    Cell[][] tableau = new Cell[10][10];
-    int positionX =  0;
-    int positionY = tableau[0].length;
+    Cell[][] knownCases;
+    Cell[][] map;
+    Point playerPosition;
 
+    public ComputedDecision(Cell[][] map, Cell[][] knownCases, Point playerPosition){
+        this.map = map;
+        this.knownCases = knownCases;
+        this.playerPosition = playerPosition;
+    }
 
-    private Direction TakeRandomDecision(ArrayList<SafeLevel> levels){
+    private Direction TakeRandomDecision(){
         int rand =  randomPeer.nextInt(4);
         return Direction.values()[rand];
     }
 
     public Direction ComputedDecision(){
 
+        SafeLevel caseUp = CheckIfCaseIsSafe(playerPosition.x, playerPosition.y+1);
+        SafeLevel caseDown = CheckIfCaseIsSafe(playerPosition.x, playerPosition.y-1);
+        SafeLevel caseRight = CheckIfCaseIsSafe(playerPosition.x+1, playerPosition.y);
+        SafeLevel caseLeft = CheckIfCaseIsSafe(playerPosition.x-1, playerPosition.y);
 
-
-        SafeLevel caseUp = CheckIfCaseIsSafe(positionX, positionY+1);
-        SafeLevel caseDown = CheckIfCaseIsSafe(positionX, positionY-1);
-        SafeLevel caseRight = CheckIfCaseIsSafe(positionX+1, positionY);
-        SafeLevel caseLeft = CheckIfCaseIsSafe(positionX-1, positionY);
-
-
-
-
-        return null;
-        //return TakeRandomDecision();
+        return TakeRandomDecision();
     }
 
+
     public SafeLevel CheckIfCaseIsSafe(int x, int y){
-        if(x < -1){ //Si on sait qu'on sort du tableau connu
+        if(x < -1){ //Si on sait qu'on sort du map connu
             return SafeLevel.notReachable;
         }
 
-        if(y > tableau[0].length){ //Si on sait qu'on sort du tableau connu
+        if(y > map[0].length){ //Si on sait qu'on sort du map connu
             return  SafeLevel.notReachable;
         }
         try{//Le try permet de s'assurer que si on tape dans
