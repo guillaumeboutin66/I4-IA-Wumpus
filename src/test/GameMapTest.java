@@ -22,4 +22,9 @@ public class GameMapTest{
             }
         }
     }
+
+    @org.junit.Test
+    public final void testAddAdjacentEvent() throws Exception{
+
+    }
 }

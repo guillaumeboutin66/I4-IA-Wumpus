@@ -6,17 +6,15 @@ import java.util.ArrayList;
 public class Cell {
 
     private ArrayList<Event> events = new ArrayList<>();
-    Point position;
-    int danger;
+    public Point position;
 
-    Cell(Point pos, int d){
+    Cell(Point pos){
         position = pos;
-        danger = d;
     }
 
     @Override
     public String toString(){
-        return "["+this.position.x+", "+this.position.y+", danger : "+this.danger+"]";
+        return "["+this.position.x+", "+this.position.y+", events : "+ getEvents().toString();
     }
 
 
@@ -24,10 +22,15 @@ public class Cell {
         return events;
     }
 
+    public void addEvent(Event e){
+        events.add(e);
+    }
 
     public enum Event{
+        wumpus,
+        gold,
+        pit,
         smell,
-        wind,
-        empty
+        wind
     }
 }

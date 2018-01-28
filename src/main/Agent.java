@@ -19,8 +19,8 @@ public class Agent extends Cell {
     private boolean Shoot;
     private int Direction;
 
-    public Agent(Point p, int danger) {
-        super(p, danger);
+    public Agent(Point p) {
+        super(p);
         
         this.Direction = 90;
         this.Shoot = true;
