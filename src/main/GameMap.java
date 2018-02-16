@@ -109,11 +109,7 @@ public class GameMap {
     }
 
     private boolean checkIfSideEventExistOnCell(Cell cell, Cell.Event event){
-        if(!cell.getEvents().contains(event) && !cell.getEvents().contains(Cell.Event.wumpus) && !cell.getEvents().contains(Cell.Event.pit)) {
-            return true;
-        } else {
-            return false;
-        }
+        return (!cell.getEvents().contains(event) && !cell.getEvents().contains(Cell.Event.pit));
     }
 
     private int generateRandom(int Max){
