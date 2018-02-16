@@ -94,17 +94,25 @@ public class GameMap {
      * @param event
      */
     private void addAdjacentEvent(Cell cell, Cell.Event event){
-        if(cell.position.x > 0){
+        if(cell.position.x > 0 && checkIfSideEventExistOnCell(cells[cell.position.x-1][cell.position.y], event)){
             cells[cell.position.x-1][cell.position.y].addEvent(event);
         }
-        if(cell.position.y > 0){
+        if(cell.position.y > 0 && checkIfSideEventExistOnCell(cells[cell.position.x][cell.position.y-1], event)){
             cells[cell.position.x][cell.position.y-1].addEvent(event);
         }
-        if(cell.position.x < width-1){
+        if(cell.position.x < width-1 && checkIfSideEventExistOnCell(cells[cell.position.x+1][cell.position.y], event)){
             cells[cell.position.x+1][cell.position.y].addEvent(event);
         }
-        if(cell.position.y < length-1){
+        if(cell.position.y < length-1 && checkIfSideEventExistOnCell(cells[cell.position.x][cell.position.y+1], event)){
             cells[cell.position.x][cell.position.y+1].addEvent(event);
+        }
+    }
+
+    private boolean checkIfSideEventExistOnCell(Cell cell, Cell.Event event){
+        if(!cell.getEvents().contains(event) && !cell.getEvents().contains(Cell.Event.wumpus) && !cell.getEvents().contains(Cell.Event.pit)) {
+            return true;
+        } else {
+            return false;
         }
     }
 

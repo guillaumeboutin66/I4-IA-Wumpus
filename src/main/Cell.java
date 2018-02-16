@@ -14,7 +14,7 @@ public class Cell {
 
     @Override
     public String toString(){
-        return "["+this.position.x+", "+this.position.y+", events : "+ getEvents().toString();
+        return "["+this.position.x+", "+this.position.y+"]/"+ getEvents().toString();
     }
 
 
