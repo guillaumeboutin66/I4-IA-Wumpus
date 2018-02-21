@@ -24,6 +24,9 @@ public class Cell {
         return events;
     }
 
+    public int getDanger(){
+        return this.danger;
+    }
 
     public enum Event{
         smell,

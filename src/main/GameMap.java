@@ -2,8 +2,10 @@ package main;
 
 import main.Cell;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+
 
 public class GameMap {
 
@@ -99,5 +101,95 @@ public class GameMap {
 
     public Wumpus getWumpus(){
         return null;
+    }
+
+    public void generate(){
+
+        Cell[][] mycells = getCells();
+
+        JFrame frame = new JFrame("Wumpus Game");
+        //frame.setSize(800, 600);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+
+
+        // Map découverte
+        JPanel panelGame = new JPanel(new GridLayout(getWidth(),getLength())); // on n'a pas besoin de mettre le nombre de lignes si on donne un nombre de colonnes
+        JPanel panelPlayer = new JPanel(new GridLayout(getWidth(),getLength())); // on n'a pas besoin de mettre le nombre de lignes si on donne un nombre de colonnes
+
+        for(int i = 0; i < mycells.length; i++){
+            for(int j = 0; j < mycells[i].length; j++){
+                // Création cellule
+                JPanel celluleGame = new JPanel(); // on utilise un simple JPanel pour chaque cellule, donc on adaptera la couleur de fond (background)
+                JPanel cellulePlayer = new JPanel(); // on utilise un simple JPanel pour chaque cellule, donc on adaptera la couleur de fond (background)
+                celluleGame.setPreferredSize(new Dimension(32,32)); // donne une taille de 32x32 pixels par défaut
+                cellulePlayer.setPreferredSize(new Dimension(32,32)); // donne une taille de 32x32 pixels par défaut
+
+                // Definir coordonné de la cellule x,y
+                celluleGame.setLocation(i, j);
+                cellulePlayer.setLocation(i, j);
+                celluleGame.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                cellulePlayer.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+
+                // Generation map
+                if(mycells[i][j].getDanger() == 0){
+                    celluleGame.setBackground(Color.WHITE);
+                    cellulePlayer.setBackground(Color.BLACK);
+                }else if(mycells[i][j].getDanger() == 1){
+                    celluleGame.setBackground(Color.GREEN);
+                    JLabel jlabelGame = new JLabel("A");
+                    celluleGame.add(jlabelGame);
+                    cellulePlayer.setBackground(Color.GREEN);
+                    JLabel jlabelPlayer = new JLabel("A");
+                    cellulePlayer.add(jlabelPlayer);
+                }else if(mycells[i][j].getDanger() == 100){
+                    celluleGame.setBackground(Color.YELLOW);
+                    JLabel jlabelCelluleGame = new JLabel("P");
+                    celluleGame.add(jlabelCelluleGame);
+                    cellulePlayer.setBackground(Color.BLACK);
+                    JLabel jlabelCellulePlayer = new JLabel("P");
+                    cellulePlayer.add(jlabelCellulePlayer);
+                }else if(mycells[i][j].getDanger() == 1000){
+                    celluleGame.setBackground(Color.RED);
+                    JLabel jlabelCelluleGame = new JLabel("W");
+                    celluleGame.add(jlabelCelluleGame);
+                    cellulePlayer.setBackground(Color.BLACK);
+                    JLabel jlabelCellulePlayer = new JLabel("W");
+                    cellulePlayer.add(jlabelCellulePlayer);
+                }
+
+                // Ajout de la cellule dans une liste de cellules
+                panelGame.add(celluleGame);
+                panelPlayer.add(cellulePlayer);
+
+            }
+        }
+
+        frame.add(panelGame, BorderLayout.LINE_START);
+        frame.add(panelPlayer, BorderLayout.LINE_END);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
+
+    public void display(){
+
+        Cell[][] mycells = getCells();
+
+        for(int i = 0; i < mycells.length; i++) {
+            for (int j = 0; j < mycells[i].length; j++) {
+                // Ajout du player
+                if(mycells[i][j].getDanger() == 0){
+                    System.out.print("|     ");
+                }else if(mycells[i][j].getDanger() == 1){
+                    System.out.print("|  A  ");
+                }else if(mycells[i][j].getDanger() == 100){
+                    System.out.print("|  P  ");
+                }else if(mycells[i][j].getDanger() == 1000){
+                    System.out.print("|  W  ");
+                }
+            }
+            System.out.println("| \n");
+        }
     }
 }

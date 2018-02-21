@@ -1,5 +1,7 @@
 package main;
 
+
+
 class Game {
     //initialisation de la map
 
@@ -7,9 +9,13 @@ class Game {
         GameMap map = new GameMap(10,10);
         int tourCount = 0;
         int fin = 0;
+        System.out.println("Wumpus Game");
 
 
         //affichage(map);
+        map.generate();
+        map.display();
+
         //affichage(joueur);
         //boucle de jeu principale
         //peut être mise dans un classe jeu du genre jeu.gameloop();
