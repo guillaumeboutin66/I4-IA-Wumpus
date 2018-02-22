@@ -21,7 +21,7 @@ class Game {
         //peut être mise dans un classe jeu du genre jeu.gameloop();
         while (fin == 0) {
             //action = joueur.action(map);
-            ComputedDecision action = new ComputedDecision();
+            //ComputedDecision action = new ComputedDecision();
 
             //check condition de sortie
             fin = checkEnd();
