@@ -22,18 +22,21 @@ public class GameMap {
 
         //Agent
         Point agentPos = new Point(0,length-1);
-        cells[0][length-1] = new Cell(agentPos,1);
+        cells[0][length-1] = new Cell(agentPos);
+        cells[0][length-1].addEvent(Cell.Event.agent);
         lockedPoints.add(agentPos);
 
         // Wumpus
         Point posWumpus = generatePoint(width, length, lockedPoints);
-        cells[posWumpus.x][posWumpus.y] = new Cell(posWumpus,1000);
+        cells[posWumpus.x][posWumpus.y] = new Cell(posWumpus);
+        cells[posWumpus.x][posWumpus.y].addEvent(Cell.Event.wumpus);
         lockedPoints.add(posWumpus);
 
         // Gold
         Point posGold = generatePoint(width, length, lockedPoints);
-        cells[posGold.x][posGold.y] = new Cell(posGold,100);
-        lockedPoints.add(posWumpus);
+        cells[posGold.x][posGold.y] = new Cell(posGold);
+        cells[posGold.x][posGold.y].addEvent(Cell.Event.gold);
+        lockedPoints.add(posGold);
 
         // Pit
         // RANDOM INT BETWEEN 1 & 20% of the number of cells
@@ -41,18 +44,31 @@ public class GameMap {
         int randomNumberOfPits = generateRandom(maxNumberOfPits);
         for(int i = 0; i < randomNumberOfPits; i++){
             Point posPit = generatePoint(width, length, lockedPoints);
-            cells[posPit.x][posPit.y] = new Cell(posPit,100);
+            cells[posPit.x][posPit.y] = new Cell(posPit);
+            cells[posPit.x][posPit.y].addEvent(Cell.Event.pit);
             lockedPoints.add(posPit);
         }
 
+        // Fill the rest of the Map of normal Cells
         for(int i = 0; i < width; i++){
             for(int j = 0; j < length; j++) {
                 if(cells[i][j] == null){
-                    cells[i][j] = new Cell(new Point(i,j),0);
+                    cells[i][j] = new Cell(new Point(i,j));
                 }
             }
         }
 
+        // Fill the Map of side event Cells
+        for(int i = 0; i < width; i++){
+            for(int j = 0; j < length; j++) {
+                if(cells[i][j].getEvents().contains(Cell.Event.wumpus)){
+                    addAdjacentEvent(cells[i][j], Cell.Event.smell);
+                }
+                if(cells[i][j].getEvents().contains(Cell.Event.pit)){
+                    addAdjacentEvent(cells[i][j], Cell.Event.wind);
+                }
+            }
+        }
     }
 
     private Point generatePoint(int maxWidth, int maxLength, ArrayList<Point> avoidPoints){
@@ -75,6 +91,30 @@ public class GameMap {
 
     }
 
+    /**
+     * Add the event to adjacents cells
+     * @param cell
+     * @param event
+     */
+    private void addAdjacentEvent(Cell cell, Cell.Event event){
+        if(cell.position.x > 0 && checkIfSideEventExistOnCell(cells[cell.position.x-1][cell.position.y], event)){
+            cells[cell.position.x-1][cell.position.y].addEvent(event);
+        }
+        if(cell.position.y > 0 && checkIfSideEventExistOnCell(cells[cell.position.x][cell.position.y-1], event)){
+            cells[cell.position.x][cell.position.y-1].addEvent(event);
+        }
+        if(cell.position.x < width-1 && checkIfSideEventExistOnCell(cells[cell.position.x+1][cell.position.y], event)){
+            cells[cell.position.x+1][cell.position.y].addEvent(event);
+        }
+        if(cell.position.y < length-1 && checkIfSideEventExistOnCell(cells[cell.position.x][cell.position.y+1], event)){
+            cells[cell.position.x][cell.position.y+1].addEvent(event);
+        }
+    }
+
+    private boolean checkIfSideEventExistOnCell(Cell cell, Cell.Event event){
+        return (!cell.getEvents().contains(event) && !cell.getEvents().contains(Cell.Event.pit));
+    }
+
     private int generateRandom(int Max){
         return (int) Math.round((Math.random() * (Max - 1)));
     }
@@ -93,14 +133,6 @@ public class GameMap {
 
     public ArrayList<Point> getLockedPoints() {
         return lockedPoints;
-    }
-
-    public Agent getAgent(){
-        return null;
-    }
-
-    public Wumpus getWumpus(){
-        return null;
     }
 
     public void generate(){
@@ -132,24 +164,25 @@ public class GameMap {
                 cellulePlayer.setBorder(BorderFactory.createLineBorder(Color.WHITE));
 
                 // Generation map
-                if(mycells[i][j].getDanger() == 0){
+                // Case without events
+                if(mycells[i][j].getEvents().isEmpty()){
                     celluleGame.setBackground(Color.WHITE);
                     cellulePlayer.setBackground(Color.BLACK);
-                }else if(mycells[i][j].getDanger() == 1){
+                }else if(mycells[i][j].getEvents().contains(Cell.Event.agent)){
                     celluleGame.setBackground(Color.GREEN);
                     JLabel jlabelGame = new JLabel("A");
                     celluleGame.add(jlabelGame);
                     cellulePlayer.setBackground(Color.GREEN);
                     JLabel jlabelPlayer = new JLabel("A");
                     cellulePlayer.add(jlabelPlayer);
-                }else if(mycells[i][j].getDanger() == 100){
+                }else if(mycells[i][j].getEvents().contains(Cell.Event.pit)){
                     celluleGame.setBackground(Color.YELLOW);
                     JLabel jlabelCelluleGame = new JLabel("P");
                     celluleGame.add(jlabelCelluleGame);
                     cellulePlayer.setBackground(Color.BLACK);
                     JLabel jlabelCellulePlayer = new JLabel("P");
                     cellulePlayer.add(jlabelCellulePlayer);
-                }else if(mycells[i][j].getDanger() == 1000){
+                }else if(mycells[i][j].getEvents().contains(Cell.Event.wumpus)){
                     celluleGame.setBackground(Color.RED);
                     JLabel jlabelCelluleGame = new JLabel("W");
                     celluleGame.add(jlabelCelluleGame);

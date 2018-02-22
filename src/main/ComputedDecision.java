@@ -109,6 +109,13 @@ public class ComputedDecision {
         for (int i = 0; i < safeLevels.length; i++) {
             
         }
+        SafeLevel caseUp = CheckIfCaseIsSafe(positionX, positionY+1);
+        SafeLevel caseDown = CheckIfCaseIsSafe(positionX, positionY-1);
+        SafeLevel caseRight = CheckIfCaseIsSafe(positionX+1, positionY);
+        SafeLevel caseLeft = CheckIfCaseIsSafe(positionX-1, positionY);
+
+        return null;
+        //return TakeRandomDecision();
     }
 
     public SafeLevel CheckIfCaseIsSafe(int x, int y){
@@ -119,7 +126,8 @@ public class ComputedDecision {
         if(y > map[0].length){ //Si on sait qu'on sort du map connu
             return new SafeLevel(SafeLevel.Level.notReachable, x, y);
         }
-        try{//Le try permet de s'assurer que si on tape dans
+
+        try{ //Le try permet de s'assurer que si on tape dans
             Cell tmp = knownCases[x][knownCases[0].length -y];
             if(tmp!= null){
                 if(tmp.getEvents().size() == 0){
