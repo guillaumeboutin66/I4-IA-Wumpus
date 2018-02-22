@@ -1,4 +1,5 @@
 package main;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -21,15 +22,10 @@ public class ComputedDecision {
 
     public Direction ComputedDecision(){
 
-
-
         SafeLevel caseUp = CheckIfCaseIsSafe(positionX, positionY+1);
         SafeLevel caseDown = CheckIfCaseIsSafe(positionX, positionY-1);
         SafeLevel caseRight = CheckIfCaseIsSafe(positionX+1, positionY);
         SafeLevel caseLeft = CheckIfCaseIsSafe(positionX-1, positionY);
-
-
-
 
         return null;
         //return TakeRandomDecision();
@@ -43,7 +39,8 @@ public class ComputedDecision {
         if(y > tableau[0].length){ //Si on sait qu'on sort du tableau connu
             return  SafeLevel.notReachable;
         }
-        try{//Le try permet de s'assurer que si on tape dans
+
+        try{ //Le try permet de s'assurer que si on tape dans
             Cell tmp = knownCases[x][knownCases[0].length -y];
             if(tmp!= null){
                 if(tmp.getEvents().size() == 0){

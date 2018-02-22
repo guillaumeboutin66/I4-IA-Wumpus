@@ -132,24 +132,24 @@ public class GameMap {
                 cellulePlayer.setBorder(BorderFactory.createLineBorder(Color.WHITE));
 
                 // Generation map
-                if(mycells[i][j].getDanger() == 0){
+                if(mycells[j][i].getDanger() == 0){
                     celluleGame.setBackground(Color.WHITE);
                     cellulePlayer.setBackground(Color.BLACK);
-                }else if(mycells[i][j].getDanger() == 1){
+                }else if(mycells[j][i].getDanger() == 1){
                     celluleGame.setBackground(Color.GREEN);
                     JLabel jlabelGame = new JLabel("A");
                     celluleGame.add(jlabelGame);
                     cellulePlayer.setBackground(Color.GREEN);
                     JLabel jlabelPlayer = new JLabel("A");
                     cellulePlayer.add(jlabelPlayer);
-                }else if(mycells[i][j].getDanger() == 100){
+                }else if(mycells[j][i].getDanger() == 100){
                     celluleGame.setBackground(Color.YELLOW);
                     JLabel jlabelCelluleGame = new JLabel("P");
                     celluleGame.add(jlabelCelluleGame);
                     cellulePlayer.setBackground(Color.BLACK);
                     JLabel jlabelCellulePlayer = new JLabel("P");
                     cellulePlayer.add(jlabelCellulePlayer);
-                }else if(mycells[i][j].getDanger() == 1000){
+                }else if(mycells[j][i].getDanger() == 1000){
                     celluleGame.setBackground(Color.RED);
                     JLabel jlabelCelluleGame = new JLabel("W");
                     celluleGame.add(jlabelCelluleGame);
