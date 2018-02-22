@@ -1,12 +1,19 @@
 package main;
+
+import java.awt.*;
+
 /**
  * Created by Azuro on 14/12/2017.
  */
 public class SuspiciousCell {
-    private ComputedDecision.Direction direction;
-    private ComputedDecision.SafeLevel safeLevel;
-
-    public SuspiciousCell(ComputedDecision.Direction _direction, ComputedDecision.SafeLevel _safeLevel){
-        direction = _direction;
+    SafeLevel safeLevel;
+    Point position;
+    int danger = 0;
+    
+    public enum SafeLevel{
+        safe,
+        unsafe,
+        unknown,
+        notReachable
     }
 }
