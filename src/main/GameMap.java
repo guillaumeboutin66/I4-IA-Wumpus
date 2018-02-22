@@ -165,31 +165,69 @@ public class GameMap {
 
                 // Generation map
                 // Case without events
-                if(mycells[i][j].getEvents().isEmpty()){
+                String dangers = " ";
+                celluleGame.setBackground(Color.WHITE);
+                cellulePlayer.setBackground(Color.BLACK);
+                for (Cell.Event event :mycells[j][i].getEvents()) {
+
+                        if (mycells[j][i].getEvents().contains(Cell.Event.agent)) {
+                            dangers = dangers + "A";
+                            celluleGame.setBackground(Color.GREEN);
+                            cellulePlayer.setBackground(Color.GREEN);
+                        }
+                        if (mycells[j][i].getEvents().contains(Cell.Event.gold)) {
+                            dangers = dangers + "G";
+                            celluleGame.setBackground(Color.YELLOW);
+                            cellulePlayer.setBackground(Color.BLACK);
+                        }
+                        if (mycells[j][i].getEvents().contains(Cell.Event.wumpus)) {
+                            dangers = dangers + "W";
+                            celluleGame.setBackground(Color.RED);
+                            cellulePlayer.setBackground(Color.BLACK);
+                        }
+                        if (mycells[j][i].getEvents().contains(Cell.Event.smell)) {
+                            celluleGame.setBackground(Color.ORANGE);
+                            cellulePlayer.setBackground(Color.BLACK);
+                        }
+                        if (mycells[j][i].getEvents().contains(Cell.Event.pit)) {
+                            celluleGame.setBackground(Color.BLUE);
+                            cellulePlayer.setBackground(Color.BLACK);
+                        }
+                        if (mycells[j][i].getEvents().contains(Cell.Event.wind)) {
+                            celluleGame.setBackground(Color.CYAN);
+                            cellulePlayer.setBackground(Color.BLACK);
+                        }
+                        JLabel jlabelGame = new JLabel(dangers);
+                        celluleGame.add(jlabelGame);
+                        JLabel jlabelPlayer = new JLabel(dangers);
+                        cellulePlayer.add(jlabelPlayer);
+
+                }
+                /*if(mycells[j][i].getEvents().isEmpty()){
                     celluleGame.setBackground(Color.WHITE);
                     cellulePlayer.setBackground(Color.BLACK);
-                }else if(mycells[i][j].getEvents().contains(Cell.Event.agent)){
+                }else if(mycells[j][i].getEvents().contains(Cell.Event.agent)){
                     celluleGame.setBackground(Color.GREEN);
                     JLabel jlabelGame = new JLabel("A");
                     celluleGame.add(jlabelGame);
                     cellulePlayer.setBackground(Color.GREEN);
                     JLabel jlabelPlayer = new JLabel("A");
                     cellulePlayer.add(jlabelPlayer);
-                }else if(mycells[i][j].getEvents().contains(Cell.Event.pit)){
+                }else if(mycells[j][i].getEvents().contains(Cell.Event.pit)){
                     celluleGame.setBackground(Color.YELLOW);
                     JLabel jlabelCelluleGame = new JLabel("P");
                     celluleGame.add(jlabelCelluleGame);
                     cellulePlayer.setBackground(Color.BLACK);
                     JLabel jlabelCellulePlayer = new JLabel("P");
                     cellulePlayer.add(jlabelCellulePlayer);
-                }else if(mycells[i][j].getEvents().contains(Cell.Event.wumpus)){
+                }else if(mycells[j][i].getEvents().contains(Cell.Event.wumpus)){
                     celluleGame.setBackground(Color.RED);
                     JLabel jlabelCelluleGame = new JLabel("W");
                     celluleGame.add(jlabelCelluleGame);
                     cellulePlayer.setBackground(Color.BLACK);
                     JLabel jlabelCellulePlayer = new JLabel("W");
                     cellulePlayer.add(jlabelCellulePlayer);
-                }
+                }*/
 
                 // Ajout de la cellule dans une liste de cellules
                 panelGame.add(celluleGame);
@@ -211,16 +249,30 @@ public class GameMap {
 
         for(int i = 0; i < mycells.length; i++) {
             for (int j = 0; j < mycells[i].length; j++) {
-                // Ajout du player
-                if(mycells[i][j].getDanger() == 0){
-                    System.out.print("|     ");
-                }else if(mycells[i][j].getDanger() == 1){
-                    System.out.print("|  A  ");
-                }else if(mycells[i][j].getDanger() == 100){
-                    System.out.print("|  P  ");
-                }else if(mycells[i][j].getDanger() == 1000){
-                    System.out.print("|  W  ");
+                String dangers = "";
+                for (Cell.Event event :mycells[j][i].getEvents()) {
+                    if (mycells[j][i].getEvents().contains(Cell.Event.agent)) {
+                        dangers = dangers + "A";
+                    }
+                    if (mycells[j][i].getEvents().contains(Cell.Event.gold)) {
+                        dangers = dangers + "G";
+                    }
+                    if (mycells[j][i].getEvents().contains(Cell.Event.wumpus)) {
+                        dangers = dangers + "W";
+                    }
+                    if (mycells[j][i].getEvents().contains(Cell.Event.smell)) {
+                        dangers = dangers + "S";
+                    }
+                    if (mycells[j][i].getEvents().contains(Cell.Event.pit)) {
+                        dangers = dangers + "P";
+                    }
+                    if (mycells[j][i].getEvents().contains(Cell.Event.wind)) {
+                        dangers = dangers + "I";
+                    }
                 }
+                // Ajout du player
+                System.out.print("|  "+dangers+"  ");
+
             }
             System.out.println("| \n");
         }
