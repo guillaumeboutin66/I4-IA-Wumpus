@@ -31,6 +31,7 @@ public class Cell {
         gold,
         pit,
         smell,
-        wind
+        wind,
+        agent
     }
 }

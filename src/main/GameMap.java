@@ -23,6 +23,7 @@ public class GameMap {
         //Agent
         Point agentPos = new Point(0,length-1);
         cells[0][length-1] = new Cell(agentPos);
+        cells[0][length-1].addEvent(Cell.Event.agent);
         lockedPoints.add(agentPos);
 
         // Wumpus
@@ -134,14 +135,6 @@ public class GameMap {
         return lockedPoints;
     }
 
-    public Agent getAgent(){
-        return null;
-    }
-
-    public Wumpus getWumpus(){
-        return null;
-    }
-
     public void generate(){
 
         Cell[][] mycells = getCells();
@@ -171,24 +164,25 @@ public class GameMap {
                 cellulePlayer.setBorder(BorderFactory.createLineBorder(Color.WHITE));
 
                 // Generation map
-                if(mycells[i][j].getDanger() == 0){
+                // Case without events
+                if(mycells[i][j].getEvents().isEmpty()){
                     celluleGame.setBackground(Color.WHITE);
                     cellulePlayer.setBackground(Color.BLACK);
-                }else if(mycells[i][j].getDanger() == 1){
+                }else if(mycells[i][j].getEvents().contains(Cell.Event.agent)){
                     celluleGame.setBackground(Color.GREEN);
                     JLabel jlabelGame = new JLabel("A");
                     celluleGame.add(jlabelGame);
                     cellulePlayer.setBackground(Color.GREEN);
                     JLabel jlabelPlayer = new JLabel("A");
                     cellulePlayer.add(jlabelPlayer);
-                }else if(mycells[i][j].getDanger() == 100){
+                }else if(mycells[i][j].getEvents().contains(Cell.Event.pit)){
                     celluleGame.setBackground(Color.YELLOW);
                     JLabel jlabelCelluleGame = new JLabel("P");
                     celluleGame.add(jlabelCelluleGame);
                     cellulePlayer.setBackground(Color.BLACK);
                     JLabel jlabelCellulePlayer = new JLabel("P");
                     cellulePlayer.add(jlabelCellulePlayer);
-                }else if(mycells[i][j].getDanger() == 1000){
+                }else if(mycells[i][j].getEvents().contains(Cell.Event.wumpus)){
                     celluleGame.setBackground(Color.RED);
                     JLabel jlabelCelluleGame = new JLabel("W");
                     celluleGame.add(jlabelCelluleGame);
