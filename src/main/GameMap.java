@@ -270,8 +270,38 @@ public class GameMap {
                         dangers = dangers + "I";
                     }
                 }
+                //System.out.println("\n dangers : "+dangers+ "*\n");
                 // Ajout du player
+                if(dangers.equals("")){
+                    dangers = "  ";
+                }else if(dangers.equals("A")){
+                    dangers = "A ";
+                }else if(dangers.equals("G")){
+                    dangers = "G ";
+                }else if(dangers.equals("I")){
+                    dangers = "I ";
+                }else if(dangers.equals("P")){
+                    dangers = "P ";
+                }else if(dangers.equals("S")){
+                    dangers = "S ";
+                }else if(dangers.equals("GIGI")){
+                    dangers = "GI";
+                }else if(dangers.equals("SISI")){
+                    dangers = "SI";
+                }else if(dangers.equals("WIWI")){
+                    dangers = "WI";
+                }else if(dangers.equals("ASAS")){
+                    dangers = "AS";
+                }else if(dangers.equals("AIAI")){
+                    dangers = "AI";
+                }
+
                 System.out.print("|  "+dangers+"  ");
+
+
+
+
+
 
             }
             System.out.println("| \n");
