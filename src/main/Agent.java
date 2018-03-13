@@ -143,7 +143,7 @@ public class Agent extends Cell {
             createSupposedCell(xCurrentCell+1, yCurrentCell, event);
         }
         if(yCurrentCell < knownCells[0].length -1 && knownCells[xCurrentCell][yCurrentCell+1] == null){
-            createSupposedCell(xCurrentCell+1, yCurrentCell, event);
+            createSupposedCell(xCurrentCell, yCurrentCell+1, event);
         }
     }
 
@@ -177,5 +177,11 @@ public class Agent extends Cell {
         this.Direction = Direction;
     }
 
+    public Cell[][] getSupposedCells() {
+        return supposedCells;
+    }
 
+    public Cell[][] getKnownCells() {
+        return knownCells;
+    }
 }

@@ -112,6 +112,7 @@ public class GameMap {
     }
 
     private boolean checkIfSideEventExistOnCell(Cell cell, Cell.Event event){
+        //Check pit, because we won't put the gold or the Wumpus on that cell (or event wind or smell)
         return (!cell.getEvents().contains(event) && !cell.getEvents().contains(Cell.Event.pit));
     }
 

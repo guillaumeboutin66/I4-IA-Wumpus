@@ -1,17 +1,8 @@
 package test;
 
-import main.Cell;
 import main.GameMap;
 
 public class GameMapTest{
-
-    public void main(String[] args) {
-        try {
-            testCreationMap();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     @org.junit.Test
     public final void testCreationMap() throws Exception{

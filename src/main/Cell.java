@@ -8,7 +8,7 @@ public class Cell {
     private ArrayList<Event> events = new ArrayList<>();
     public Point position;
 
-    Cell(Point pos){
+    public Cell(Point pos){
         position = pos;
     }
 
