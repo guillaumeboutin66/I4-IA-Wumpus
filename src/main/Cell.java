@@ -7,6 +7,7 @@ public class Cell {
 
     private ArrayList<Event> events = new ArrayList<>();
     public Point position;
+    private Boolean deadly;
 
     public Cell(Point pos){
         position = pos;
@@ -24,6 +25,13 @@ public class Cell {
 
     public void addEvent(Event e){
         events.add(e);
+        if(e == Event.wumpus || e == Event.pit){
+            deadly = true;
+        }
+    }
+
+    public Boolean isDangerous(){
+        return deadly;
     }
 
     public enum Event{
