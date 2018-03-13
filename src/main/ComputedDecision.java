@@ -6,22 +6,19 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Random;
 
-import main.SuspiciousCell.SafeLevel;
-
 /**
  * Created by Azuro on 14/12/2017.
  */
 public class ComputedDecision {
 
     Random randomPeer = new Random();
-    int knownMaxHeight = 0;
+    int knownMaxHeight = 0;//Those will be used later
     int knownMaxWidth = 0;
-    SuspiciousCell[][] knownCases;
+    Cell[][] knownCases;
     Cell[][] map;
     Point playerPosition;
 
-    //SuspiciousCell
-    public ComputedDecision(Cell[][] map, SuspiciousCell[][] knownCases, Point playerPosition) {
+    public ComputedDecision(Cell[][] map, Cell[][] knownCases, Point playerPosition) {
         this.map = map;
         this.knownCases = knownCases;
         this.playerPosition = playerPosition;
@@ -29,57 +26,52 @@ public class ComputedDecision {
 
     public Direction[] takeDecision() {
         //maybe check first on a low radius, then increse it ?
-        SuspiciousCell targetCell = findCell(5, knownCases[playerPosition.x][playerPosition.y]);
+        Point targetPosition = findCell(5, knownCases[playerPosition.x][playerPosition.y]);
 
         //return toDirections(AStart(targetCell, playerPosition));
         return null;
     }
 
-
-    private SuspiciousCell findCell(int radius, SuspiciousCell cell) {
-        HashSet<SuspiciousCell> radiusOldCell = new HashSet<SuspiciousCell>();
-        HashSet<SuspiciousCell> radiusNewCell = new HashSet<SuspiciousCell>();
+    private Point findCell(int radius, Cell cell) {
+        HashSet<Cell> radiusOldCell = new HashSet<Cell>();
+        HashSet<Cell> radiusNewCell = new HashSet<Cell>();
         radiusOldCell.add(cell);
 
         for (int i = 0; i < radius; i++) {
-            for (SuspiciousCell suCell : radiusOldCell) {
-                SuspiciousCell tmp;
+            for (Cell suCell : radiusOldCell) {
+                Cell tmp;
                 if (suCell.position.x - 1 >= 0) {
                     tmp = knownCases[suCell.position.x - 1][suCell.position.y];
-                    if (tmp.safeLevel == SafeLevel.unknown) {
-                        return tmp;
-                    } else if (!radiusNewCell.contains(tmp) && !radiusOldCell.contains(tmp)
-                            && tmp.safeLevel != SafeLevel.unsafe) {
+                    if (tmp == null) {
+                        return new Point(suCell.position.x - 1, suCell.position.y);
+                    } else if (!radiusNewCell.contains(tmp) && !radiusOldCell.contains(tmp) && !tmp.isDangerous()) {
                         radiusNewCell.add(tmp);
                     }
                 }
 
                 if (suCell.position.x + 1 < knownCases.length) {
                     tmp = knownCases[suCell.position.x + 1][suCell.position.y];
-                    if (tmp.safeLevel == SafeLevel.unknown) {
-                        return tmp;
-                    } else if (!radiusNewCell.contains(tmp) && !radiusOldCell.contains(tmp)
-                            && tmp.safeLevel != SafeLevel.unsafe) {
+                    if (tmp == null) {
+                        return new Point(suCell.position.x + 1, suCell.position.y);
+                    } else if (!radiusNewCell.contains(tmp) && !radiusOldCell.contains(tmp) && !tmp.isDangerous()) {
                         radiusNewCell.add(tmp);
                     }
                 }
 
                 if (suCell.position.y - 1 >= 0) {
                     tmp = knownCases[suCell.position.x][suCell.position.y - 1];
-                    if (tmp.safeLevel == SafeLevel.unknown) {
-                        return tmp;
-                    } else if (!radiusNewCell.contains(tmp) && !radiusOldCell.contains(tmp)
-                            && tmp.safeLevel != SafeLevel.unsafe) {
+                    if (tmp == null) {
+                        return new Point(suCell.position.x, suCell.position.y - 1);
+                    } else if (!radiusNewCell.contains(tmp) && !radiusOldCell.contains(tmp) && !tmp.isDangerous()) {
                         radiusNewCell.add(tmp);
                     }
                 }
 
                 if (suCell.position.y + 1 < knownCases[0].length) {
                     tmp = knownCases[suCell.position.x][suCell.position.y + 1];
-                    if (tmp.safeLevel == SafeLevel.unknown) {
-                        return tmp;
-                    } else if (!radiusNewCell.contains(tmp) && !radiusOldCell.contains(tmp)
-                            && tmp.safeLevel != SafeLevel.unsafe) {
+                    if (tmp == null) {
+                        return new Point(suCell.position.x, suCell.position.y + 1);
+                    } else if (!radiusNewCell.contains(tmp) && !radiusOldCell.contains(tmp) && !tmp.isDangerous()) {
                         radiusNewCell.add(tmp);
                     }
                 }
