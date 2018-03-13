@@ -109,18 +109,23 @@ public class Agent extends Cell {
     }
 
     //TODO : Add tests
+    /**
+     *
+     * @param currentCell
+     */
     public void addSupposedCells(Cell currentCell){
-        /* In case the current cell contains wind */
+        /* In case the current cell contains wind event */
         if(currentCell.getEvents().contains(Cell.Event.wind)){
             checkingSupposedCells(currentCell, Cell.Event.pit);
         }
+         /* In case the current cell contains smell event */
         if(currentCell.getEvents().contains(Cell.Event.smell)){
             checkingSupposedCells(currentCell, Cell.Event.wumpus);
         }
     }
 
     //TODO : Add tests
-    public void checkingSupposedCells(Cell currentCell, Cell.Event event){
+    private void checkingSupposedCells(Cell currentCell, Cell.Event event){
         int xCurrentCell = currentCell.position.x;
         int yCurrentCell = currentCell.position.y;
         if(xCurrentCell > 0 && knownCells[xCurrentCell-1][yCurrentCell] == null){
@@ -138,7 +143,7 @@ public class Agent extends Cell {
     }
 
     //TODO : Add tests
-    public void createSupposedCell(int supposedX, int supposedY, Cell.Event event){
+    private void createSupposedCell(int supposedX, int supposedY, Cell.Event event){
         if (supposedCells[supposedX][supposedY] == null){
             supposedCells[supposedX][supposedY] = new Cell(new Point(supposedX,supposedY));
             supposedCells[supposedX][supposedY].addEvent(event);
