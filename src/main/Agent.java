@@ -165,6 +165,14 @@ public class Agent extends Cell {
         }
     }
 
+    /**
+     * Add at the correct position in the knownCells array the current cell
+     * @param currentCell
+     */
+    public void pushKnownCell(Cell currentCell){
+        knownCells[currentCell.position.x][currentCell.position.y] = currentCell;
+    }
+
     public void setShoot(boolean Shoot) {
         this.Shoot = Shoot;
     }

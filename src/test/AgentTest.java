@@ -35,7 +35,14 @@ public class AgentTest {
     }
 
     @org.junit.Test
-    public final void testAddAdjacentEvent() throws Exception{
+    public final void pushKnownCellTest() throws Exception{
+        Agent agentTest = new Agent(new Point(0,9),10,10);
+        Cell currentCellTest = new Cell(new Point(1,8));
 
+        Assert.assertEquals(agentTest.getKnownCells()[1][8], null);
+
+        agentTest.pushKnownCell(currentCellTest);
+
+        Assert.assertEquals(agentTest.getKnownCells()[1][8], currentCellTest);
     }
 }
