@@ -270,7 +270,6 @@ public class GameMap {
                         dangers = dangers + "I";
                     }
                 }
-                //System.out.println("\n dangers : "+dangers+ "*\n");
                 // Ajout du player
                 if(dangers.equals("")){
                     dangers = "  ";
@@ -295,14 +294,7 @@ public class GameMap {
                 }else if(dangers.equals("AIAI")){
                     dangers = "AI";
                 }
-
                 System.out.print("|  "+dangers+"  ");
-
-
-
-
-
-
             }
             System.out.println("| \n");
         }
