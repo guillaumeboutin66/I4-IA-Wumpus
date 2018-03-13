@@ -108,7 +108,23 @@ public class Agent extends Cell {
         return Shoot;
     }
 
-    //TODO : Add tests
+    /**
+     * Do both add known and supposed Cell
+     * @param currentCell
+     */
+    public void addKnownAndSupposedCells(Cell currentCell){
+        pushKnownCell(currentCell);
+        addSupposedCells(currentCell);
+    }
+
+    /**
+     * Add at the correct position in the knownCells array the current cell
+     * @param currentCell
+     */
+    public void pushKnownCell(Cell currentCell){
+        knownCells[currentCell.position.x][currentCell.position.y] = currentCell;
+    }
+
     /**
      * Check if the cell send
      * @param currentCell
@@ -163,14 +179,6 @@ public class Agent extends Cell {
                 supposedCells[supposedX][supposedY].addEvent(event);
             }
         }
-    }
-
-    /**
-     * Add at the correct position in the knownCells array the current cell
-     * @param currentCell
-     */
-    public void pushKnownCell(Cell currentCell){
-        knownCells[currentCell.position.x][currentCell.position.y] = currentCell;
     }
 
     public void setShoot(boolean Shoot) {
