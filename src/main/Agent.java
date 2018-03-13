@@ -110,7 +110,7 @@ public class Agent extends Cell {
 
     //TODO : Add tests
     /**
-     *
+     * Check if the cell send
      * @param currentCell
      */
     public void addSupposedCells(Cell currentCell){
@@ -124,7 +124,12 @@ public class Agent extends Cell {
         }
     }
 
-    //TODO : Add tests
+    /**
+     * Will add suspicious cells if they are in the limit of the map,
+     * and if they are not in the knownCells array
+     * @param currentCell
+     * @param event
+     */
     private void checkingSupposedCells(Cell currentCell, Cell.Event event){
         int xCurrentCell = currentCell.position.x;
         int yCurrentCell = currentCell.position.y;
@@ -142,7 +147,13 @@ public class Agent extends Cell {
         }
     }
 
-    //TODO : Add tests
+    /**
+     * Create a new cell into suspiciousCells array if not exist, else push the event if it exists,
+     * but only if the cell doesn't contain the event
+     * @param supposedX
+     * @param supposedY
+     * @param event
+     */
     private void createSupposedCell(int supposedX, int supposedY, Cell.Event event){
         if (supposedCells[supposedX][supposedY] == null){
             supposedCells[supposedX][supposedY] = new Cell(new Point(supposedX,supposedY));
