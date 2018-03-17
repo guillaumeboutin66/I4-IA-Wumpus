@@ -6,10 +6,19 @@ import java.util.ArrayList;
 public class Cell {
 
     private ArrayList<Event> events = new ArrayList<>();
+
     public Point position;
 
     Cell(Point pos){
-        position = pos;
+        this.position = pos;
+    }
+
+    public Point getPosition() {
+        return position;
+    }
+
+    public void setPosition(Point position) {
+        this.position = position;
     }
 
     @Override
@@ -33,5 +42,8 @@ public class Cell {
         smell,
         wind,
         agent
+    }
+    public void removeEvent(Event e){
+        this.events.remove(e);
     }
 }

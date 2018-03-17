@@ -13,24 +13,47 @@ public class GameMap {
     private int length;
     private Cell[][] cells;
     private ArrayList<Point> lockedPoints = new ArrayList<Point>();
+    private Agent agent;
+    private Cell wumpus;
 
-    public GameMap(int w, int l){
+    public Cell getWumpus() {
+        return wumpus;
+    }
+
+    public void setWumpus(Cell wumpus) {
+        this.wumpus = wumpus;
+    }
+
+    public ArrayList<Cell> getPits() {
+        return pits;
+    }
+
+    public void setPits(ArrayList<Cell> pits) {
+        this.pits = pits;
+    }
+
+    private ArrayList<Cell> pits = new ArrayList<>();
+
+    public GameMap(int w, int l) {
         width = w;
         length = l;
 
         cells = new Cell[width][length];
 
         //Agent
-        Point agentPos = new Point(0,length-1);
-        cells[0][length-1] = new Cell(agentPos);
-        cells[0][length-1].addEvent(Cell.Event.agent);
+        Point agentPos = new Point(0, length - 1);
+        cells[0][length - 1] = new Cell(agentPos);
+        cells[0][length - 1].addEvent(Cell.Event.agent);
         lockedPoints.add(agentPos);
+        this.agent= new Agent(agentPos);
 
         // Wumpus
         Point posWumpus = generatePoint(width, length, lockedPoints);
-        cells[posWumpus.x][posWumpus.y] = new Cell(posWumpus);
+        Cell wumpus = new Cell(posWumpus);
+        cells[posWumpus.x][posWumpus.y] = wumpus;
         cells[posWumpus.x][posWumpus.y].addEvent(Cell.Event.wumpus);
         lockedPoints.add(posWumpus);
+        this.setWumpus(wumpus);
 
         // Gold
         Point posGold = generatePoint(width, length, lockedPoints);
@@ -40,82 +63,87 @@ public class GameMap {
 
         // Pit
         // RANDOM INT BETWEEN 1 & 20% of the number of cells
-        int maxNumberOfPits = (int) Math.round(w*l*0.20);
+        int maxNumberOfPits = (int) Math.round(w * l * 0.20);
         int randomNumberOfPits = generateRandom(maxNumberOfPits);
-        for(int i = 0; i < randomNumberOfPits; i++){
+        for (int i = 0; i < randomNumberOfPits; i++) {
             Point posPit = generatePoint(width, length, lockedPoints);
-            cells[posPit.x][posPit.y] = new Cell(posPit);
+            Cell pit = new Cell(posPit);
+            cells[posPit.x][posPit.y] = pit;
             cells[posPit.x][posPit.y].addEvent(Cell.Event.pit);
+            if(pit!=null) {
+                pits.add(pit);
+            }
             lockedPoints.add(posPit);
         }
 
         // Fill the rest of the Map of normal Cells
-        for(int i = 0; i < width; i++){
-            for(int j = 0; j < length; j++) {
-                if(cells[i][j] == null){
-                    cells[i][j] = new Cell(new Point(i,j));
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < length; j++) {
+                if (cells[i][j] == null) {
+                    cells[i][j] = new Cell(new Point(i, j));
                 }
             }
         }
 
         // Fill the Map of side event Cells
-        for(int i = 0; i < width; i++){
-            for(int j = 0; j < length; j++) {
-                if(cells[i][j].getEvents().contains(Cell.Event.wumpus)){
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < length; j++) {
+                if (cells[i][j].getEvents().contains(Cell.Event.wumpus)) {
                     addAdjacentEvent(cells[i][j], Cell.Event.smell);
                 }
-                if(cells[i][j].getEvents().contains(Cell.Event.pit)){
+                if (cells[i][j].getEvents().contains(Cell.Event.pit)) {
                     addAdjacentEvent(cells[i][j], Cell.Event.wind);
                 }
             }
         }
     }
 
-    private Point generatePoint(int maxWidth, int maxLength, ArrayList<Point> avoidPoints){
+    private Point generatePoint(int maxWidth, int maxLength, ArrayList<Point> avoidPoints) {
         int x = generateRandom(maxWidth);
         int y = generateRandom(maxLength);
 
         boolean alreadyExist = false;
 
-        for (Point avoidPoint: avoidPoints) {
-            if(avoidPoint.x == x && avoidPoint.y == y){
+        for (Point avoidPoint : avoidPoints) {
+            if (avoidPoint.x == x && avoidPoint.y == y) {
                 alreadyExist = true;
             }
         }
 
-        if(alreadyExist){
-            return generatePoint(maxWidth,maxLength, avoidPoints);
+        if (alreadyExist) {
+            return generatePoint(maxWidth, maxLength, avoidPoints);
         } else {
-            return new Point(x,y);
+            return new Point(x, y);
         }
 
     }
 
     /**
      * Add the event to adjacents cells
+     *
      * @param cell
      * @param event
      */
-    private void addAdjacentEvent(Cell cell, Cell.Event event){
-        if(cell.position.x > 0 && checkIfSideEventExistOnCell(cells[cell.position.x-1][cell.position.y], event)){
-            cells[cell.position.x-1][cell.position.y].addEvent(event);
+    private void addAdjacentEvent(Cell cell, Cell.Event event) {
+        if (cell.position.x > 0 && checkIfSideEventExistOnCell(cells[cell.position.x - 1][cell.position.y], event)) {
+            cells[cell.position.x - 1][cell.position.y].addEvent(event);
         }
-        if(cell.position.y > 0 && checkIfSideEventExistOnCell(cells[cell.position.x][cell.position.y-1], event)){
-            cells[cell.position.x][cell.position.y-1].addEvent(event);
+        if (cell.position.y > 0 && checkIfSideEventExistOnCell(cells[cell.position.x][cell.position.y - 1], event)) {
+            cells[cell.position.x][cell.position.y - 1].addEvent(event);
         }
-        if(cell.position.x < width-1 && checkIfSideEventExistOnCell(cells[cell.position.x+1][cell.position.y], event)){
-            cells[cell.position.x+1][cell.position.y].addEvent(event);
+        if (cell.position.x < width - 1 && checkIfSideEventExistOnCell(cells[cell.position.x + 1][cell.position.y], event)) {
+            cells[cell.position.x + 1][cell.position.y].addEvent(event);
         }
-        if(cell.position.y < length-1 && checkIfSideEventExistOnCell(cells[cell.position.x][cell.position.y+1], event)){
-            cells[cell.position.x][cell.position.y+1].addEvent(event);
+        if (cell.position.y < length - 1 && checkIfSideEventExistOnCell(cells[cell.position.x][cell.position.y + 1], event)) {
+            cells[cell.position.x][cell.position.y + 1].addEvent(event);
         }
     }
 
-    private boolean checkIfSideEventExistOnCell(Cell cell, Cell.Event event){
+    private boolean checkIfSideEventExistOnCell(Cell cell, Cell.Event event) {
         return (!cell.getEvents().contains(event) && !cell.getEvents().contains(Cell.Event.pit));
     }
 
-    private int generateRandom(int Max){
+    private int generateRandom(int Max) {
         return (int) Math.round((Math.random() * (Max - 1)));
     }
 
@@ -135,27 +163,26 @@ public class GameMap {
         return lockedPoints;
     }
 
-    public void generate(){
+    public void generate() {
 
         Cell[][] mycells = getCells();
 
-        JFrame frame = new JFrame("Wumpus Game");
         //frame.setSize(800, 600);
+        JFrame frame = new JFrame("Wumpus Game");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 
-
         // Map découverte
-        JPanel panelGame = new JPanel(new GridLayout(getWidth(),getLength())); // on n'a pas besoin de mettre le nombre de lignes si on donne un nombre de colonnes
-        JPanel panelPlayer = new JPanel(new GridLayout(getWidth(),getLength())); // on n'a pas besoin de mettre le nombre de lignes si on donne un nombre de colonnes
+        JPanel panelGame = new JPanel(new GridLayout(getWidth(), getLength())); // on n'a pas besoin de mettre le nombre de lignes si on donne un nombre de colonnes
+        JPanel panelPlayer = new JPanel(new GridLayout(getWidth(), getLength())); // on n'a pas besoin de mettre le nombre de lignes si on donne un nombre de colonnes
 
-        for(int i = 0; i < mycells.length; i++){
-            for(int j = 0; j < mycells[i].length; j++){
+        for (int i = 0; i < mycells.length; i++) {
+            for (int j = 0; j < mycells[i].length; j++) {
                 // Création cellule
                 JPanel celluleGame = new JPanel(); // on utilise un simple JPanel pour chaque cellule, donc on adaptera la couleur de fond (background)
                 JPanel cellulePlayer = new JPanel(); // on utilise un simple JPanel pour chaque cellule, donc on adaptera la couleur de fond (background)
-                celluleGame.setPreferredSize(new Dimension(32,32)); // donne une taille de 32x32 pixels par défaut
-                cellulePlayer.setPreferredSize(new Dimension(32,32)); // donne une taille de 32x32 pixels par défaut
+                celluleGame.setPreferredSize(new Dimension(32, 32)); // donne une taille de 32x32 pixels par défaut
+                cellulePlayer.setPreferredSize(new Dimension(32, 32)); // donne une taille de 32x32 pixels par défaut
 
                 // Definir coordonné de la cellule x,y
                 celluleGame.setLocation(i, j);
@@ -171,7 +198,16 @@ public class GameMap {
                 for (Cell.Event event :mycells[j][i].getEvents()) {
 
                         if (mycells[j][i].getEvents().contains(Cell.Event.agent)) {
-                            dangers = dangers + "A";
+                            String direction = agent.getDirection();
+                            if("up".equals(direction)){
+                                dangers = dangers + "^";
+                            }else if("down".equals(direction)){
+                                dangers = dangers + "v";
+                            }else if("left".equals(direction)){
+                                dangers = dangers + "<";
+                            }else {
+                                dangers = dangers + ">";
+                            }
                             celluleGame.setBackground(Color.GREEN);
                             cellulePlayer.setBackground(Color.GREEN);
                         }
@@ -203,17 +239,17 @@ public class GameMap {
                         cellulePlayer.add(jlabelPlayer);
 
                 }
-                /*if(mycells[j][i].getEvents().isEmpty()){
+                /*if (mycells[i][j].getEvents().isEmpty()) {
                     celluleGame.setBackground(Color.WHITE);
                     cellulePlayer.setBackground(Color.BLACK);
-                }else if(mycells[j][i].getEvents().contains(Cell.Event.agent)){
+                } else if (mycells[i][j].getEvents().contains(Cell.Event.agent)) {
                     celluleGame.setBackground(Color.GREEN);
                     JLabel jlabelGame = new JLabel("A");
                     celluleGame.add(jlabelGame);
                     cellulePlayer.setBackground(Color.GREEN);
                     JLabel jlabelPlayer = new JLabel("A");
                     cellulePlayer.add(jlabelPlayer);
-                }else if(mycells[j][i].getEvents().contains(Cell.Event.pit)){
+                } else if (mycells[i][j].getEvents().contains(Cell.Event.pit)) {
                     celluleGame.setBackground(Color.YELLOW);
                     JLabel jlabelCelluleGame = new JLabel("P");
                     celluleGame.add(jlabelCelluleGame);
@@ -298,5 +334,15 @@ public class GameMap {
             }
             System.out.println("| \n");
         }
+    }
+
+
+    public Agent getAgent() {
+        return agent;
+    }
+
+    public void refreshAgent(Agent a){
+        cells[a.position.x][a.position.y].addEvent(Cell.Event.agent);
+        this.agent=a;
     }
 }
