@@ -10,6 +10,7 @@ package main;
  * @author Erik
  */
 
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,19 +19,20 @@ public class Agent extends Cell {
 
     private boolean Shoot;
     private String Direction;
-    private SuspiciousCell[][] suspicious;
-    private ArrayList<Cell> knownCases;
+    private Cell[][] knownCells;
+    private Cell[][] supposedCells;
+    private Cell lastCell;
 
-    public Agent(Point p) {
+    public Agent(Point p, int weight, int height) {
         super(p);
         
         this.Direction = "up";
         this.Shoot = true;
 
-        this.suspicious = new SuspiciousCell[11][11];
-
+        knownCells = new Cell[weight][height];
+        supposedCells = new Cell[weight][height];
     }
-    
+
     public void Walk() {
     
         String CurrentDirection = this.Direction;
@@ -159,7 +161,7 @@ public class Agent extends Cell {
         if (TurnAction == true) {
             
             if(InitialDirection == "down"){
-                
+
                 this.setDirection("right");
 
             }
@@ -181,7 +183,7 @@ public class Agent extends Cell {
                     }
                 }
             }
-        }        
+        }
         else /*if(TurnAction == false)*/ {
 
             if(InitialDirection == "down"){
@@ -209,7 +211,7 @@ public class Agent extends Cell {
             }       
         }    
     }
-    
+
      public boolean UseWeapon(Cell monster) {
          
         String CurrentDirection = this.Direction;
@@ -227,12 +229,85 @@ public class Agent extends Cell {
             default: System.out.println("Invalid direction"); 
                      break;
         }
-         
+
          return false;
      }
 
     public boolean isShoot() {
         return Shoot;
+    }
+
+    /**
+     * Do both add known and supposed Cell
+     * @param currentCell
+     */
+    public void addKnownAndSupposedCells(Cell currentCell){
+        pushKnownCell(currentCell);
+        addSupposedCells(currentCell);
+    }
+
+    /**
+     * Add at the correct position in the knownCells array the current cell
+     * @param currentCell
+     */
+    public void pushKnownCell(Cell currentCell){
+        knownCells[currentCell.position.x][currentCell.position.y] = currentCell;
+    }
+
+    /**
+     * Check if the cell send
+     * @param currentCell
+     */
+    public void addSupposedCells(Cell currentCell){
+        /* In case the current cell contains wind event */
+        if(currentCell.getEvents().contains(Cell.Event.wind)){
+            checkingSupposedCells(currentCell, Cell.Event.pit);
+        }
+         /* In case the current cell contains smell event */
+        if(currentCell.getEvents().contains(Cell.Event.smell)){
+            checkingSupposedCells(currentCell, Cell.Event.wumpus);
+        }
+    }
+
+    /**
+     * Will add suspicious cells if they are in the limit of the map,
+     * and if they are not in the knownCells array
+     * @param currentCell
+     * @param event
+     */
+    private void checkingSupposedCells(Cell currentCell, Cell.Event event){
+        int xCurrentCell = currentCell.position.x;
+        int yCurrentCell = currentCell.position.y;
+        if(xCurrentCell > 0 && knownCells[xCurrentCell-1][yCurrentCell] == null){
+            createSupposedCell(xCurrentCell-1, yCurrentCell, event);
+        }
+        if(yCurrentCell > 0 && knownCells[xCurrentCell][yCurrentCell-1] == null){
+            createSupposedCell(xCurrentCell, yCurrentCell-1, event);
+        }
+        if(xCurrentCell < knownCells.length -1 && knownCells[xCurrentCell+1][yCurrentCell] == null){
+            createSupposedCell(xCurrentCell+1, yCurrentCell, event);
+        }
+        if(yCurrentCell < knownCells[0].length -1 && knownCells[xCurrentCell][yCurrentCell+1] == null){
+            createSupposedCell(xCurrentCell, yCurrentCell+1, event);
+        }
+    }
+
+    /**
+     * Create a new cell into suspiciousCells array if not exist, else push the event if it exists,
+     * but only if the cell doesn't contain the event
+     * @param supposedX
+     * @param supposedY
+     * @param event
+     */
+    private void createSupposedCell(int supposedX, int supposedY, Cell.Event event){
+        if (supposedCells[supposedX][supposedY] == null){
+            supposedCells[supposedX][supposedY] = new Cell(new Point(supposedX,supposedY));
+            supposedCells[supposedX][supposedY].addEvent(event);
+        } else {
+            if(!supposedCells[supposedX][supposedY].getEvents().contains(event)){
+                supposedCells[supposedX][supposedY].addEvent(event);
+            }
+        }
     }
 
     public void setShoot(boolean Shoot) {
@@ -247,20 +322,11 @@ public class Agent extends Cell {
         this.Direction = Direction;
     }
 
-    public SuspiciousCell[][] getSuspicious() {
-        return suspicious;
+    public Cell[][] getSupposedCells() {
+        return supposedCells;
     }
 
-    public void setDirection(SuspiciousCell[][] suspicious) {
-        this.suspicious = suspicious;
+    public Cell[][] getKnownCells() {
+        return knownCells;
     }
-
-    public ArrayList<Cell> getKnownCases() {
-        return knownCases;
-    }
-
-    public void setKnownCases(ArrayList<Cell> knownCases) {
-        this.knownCases = knownCases;
-    }
-
 }

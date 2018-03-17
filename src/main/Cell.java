@@ -6,11 +6,11 @@ import java.util.ArrayList;
 public class Cell {
 
     private ArrayList<Event> events = new ArrayList<>();
-
     public Point position;
+    private Boolean deadly;
 
-    Cell(Point pos){
-        this.position = pos;
+    public Cell(Point pos){
+        position = pos;
     }
 
     public Point getPosition() {
@@ -33,6 +33,13 @@ public class Cell {
 
     public void addEvent(Event e){
         events.add(e);
+        if(e == Event.wumpus || e == Event.pit){
+            deadly = true;
+        }
+    }
+
+    public Boolean isDangerous(){
+        return deadly;
     }
 
     public enum Event{

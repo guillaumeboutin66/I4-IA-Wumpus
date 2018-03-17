@@ -9,6 +9,8 @@ class Game {
     //initialisation de la map
 
     public static void main(String[] args) throws InterruptedException {
+        int weigh = 10;
+        int height = 10;
         GameMap map = new GameMap(10,10);
         int tourCount = 0;
         boolean fin = false;

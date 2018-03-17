@@ -1,7 +1,9 @@
 package main;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Random;
 
 /**
@@ -10,79 +12,106 @@ import java.util.Random;
 public class ComputedDecision {
 
     Random randomPeer = new Random();
-    SuspiciousCell[][] knownCases;
+    int knownMaxHeight = 0;//Those will be used later
+    int knownMaxWidth = 0;
+    Cell[][] knownCases;
     Cell[][] map;
     Point playerPosition;
 
-    //SuspiciousCell
-    public ComputedDecision(GameMap map){
-        this.map = map.getCells();
-        this.knownCases = map.getAgent().getSuspicious();
-        this.playerPosition = map.getAgent().position;
+    public ComputedDecision(Cell[][] map, Cell[][] knownCases, Point playerPosition) {
+        this.map = map;
+        this.knownCases = knownCases;
+        this.playerPosition = playerPosition;
     }
 
+    public Direction[] takeDecision() {
+        //maybe check first on a low radius, then increse it ?
+        Point targetPosition = findCell(5, knownCases[playerPosition.x][playerPosition.y]);
 
-    public ArrayList<String> takeDecision(){
-        return goTo(BasicComputedDecision());
-    } 
+        //return toDirections(AStart(targetCell, playerPosition));
+        return null;
+    }
 
-    private SuspiciousCell BasicComputedDecision(){
-        ArrayList<SuspiciousCell> cells = new ArrayList<SuspiciousCell>();
-        /*cells.add(knownCases[playerPosition.x][playerPosition.y+1]);
-        cells.add(knownCases[playerPosition.x+1][playerPosition.y]);
-        if(playerPosition.y!=0) {
-            cells.add(knownCases[playerPosition.x][playerPosition.y - 1]);
-        }
-        if(playerPosition.x!=0) {
-            cells.add(knownCases[playerPosition.x - 1][playerPosition.y]);
-        }
-        Collections.shuffle(cells);*/
-        cells.add(new SuspiciousCell(new Point(9,0),0));
-        SuspiciousCell choosedCell = cells.get(0);
+    private Point findCell(int radius, Cell cell) {
+        HashSet<Cell> radiusOldCell = new HashSet<Cell>();
+        HashSet<Cell> radiusNewCell = new HashSet<Cell>();
+        radiusOldCell.add(cell);
 
-        /* On priorise les cases non découvertes */
-        for (SuspiciousCell cell : cells) {
-            if(cell.safeLevel ==
-                    SuspiciousCell.SafeLevel.unknown){
-                if(choosedCell.safeLevel != SuspiciousCell.SafeLevel.unknown){
-                    choosedCell = cell;
-                }else if(cell.danger < choosedCell.danger){
-                    choosedCell = cell;
+        for (int i = 0; i < radius; i++) {
+            for (Cell suCell : radiusOldCell) {
+                Cell tmp;
+                if (suCell.position.x - 1 >= 0) {
+                    tmp = knownCases[suCell.position.x - 1][suCell.position.y];
+                    if (tmp == null) {
+                        return new Point(suCell.position.x - 1, suCell.position.y);
+                    } else if (!radiusNewCell.contains(tmp) && !radiusOldCell.contains(tmp) && !tmp.isDangerous()) {
+                        radiusNewCell.add(tmp);
+                    }
+                }
+
+                if (suCell.position.x + 1 < knownCases.length) {
+                    tmp = knownCases[suCell.position.x + 1][suCell.position.y];
+                    if (tmp == null) {
+                        return new Point(suCell.position.x + 1, suCell.position.y);
+                    } else if (!radiusNewCell.contains(tmp) && !radiusOldCell.contains(tmp) && !tmp.isDangerous()) {
+                        radiusNewCell.add(tmp);
+                    }
+                }
+
+                if (suCell.position.y - 1 >= 0) {
+                    tmp = knownCases[suCell.position.x][suCell.position.y - 1];
+                    if (tmp == null) {
+                        return new Point(suCell.position.x, suCell.position.y - 1);
+                    } else if (!radiusNewCell.contains(tmp) && !radiusOldCell.contains(tmp) && !tmp.isDangerous()) {
+                        radiusNewCell.add(tmp);
+                    }
+                }
+
+                if (suCell.position.y + 1 < knownCases[0].length) {
+                    tmp = knownCases[suCell.position.x][suCell.position.y + 1];
+                    if (tmp == null) {
+                        return new Point(suCell.position.x, suCell.position.y + 1);
+                    } else if (!radiusNewCell.contains(tmp) && !radiusOldCell.contains(tmp) && !tmp.isDangerous()) {
+                        radiusNewCell.add(tmp);
+                    }
                 }
             }
+
+            radiusOldCell.addAll(radiusNewCell);
+            radiusNewCell.clear();
+
         }
 
-        if(choosedCell.safeLevel == SuspiciousCell.SafeLevel.unknown){
-            return choosedCell; //On a trouvé une celle où aller
-        }
+        System.out.println("no case have been found in this range.");
+        return null;
+    }
 
-        /* On a pas trouvé une case inconnu autour de soit */
-        for (SuspiciousCell cell : cells) {
-            if(cell.safeLevel == SuspiciousCell.SafeLevel.safe){
-                return cell;
+    private Direction[] toDirections(ArrayList<Point> path) {
+        ArrayList<Direction> directions = new ArrayList<Direction>();
+        for (Point point : path) {
+            if (point.y > playerPosition.y) {
+                direction.add(Direction.up);
+            } else if (point.y < playerPosition.y) {
+                direction.add(Direction.down);
+            } else if (point.x > playerPosition.x) {
+                direction.add(Direction.right);
+            } else {
+                direction.add(Direction.left);
             }
         }
 
-        for (SuspiciousCell cell : cells) {
-            if(cell.safeLevel == SuspiciousCell.SafeLevel.unsafe){
-                return cell;
-            }
-        }
-
-        return choosedCell;
+        return direction.toArray(new Direction[direction.size()]);
     }
 
-    private ArrayList<String> goTo(SuspiciousCell cell){
-        ArrayList<String> direction = new ArrayList<>();
-        if(cell.position.y < playerPosition.y){
-            direction.add(Direction.up);
-        }else if(cell.position.y > playerPosition.y){
-            direction.add(Direction.down);
-        }else if(cell.position.x > playerPosition.x){
-            direction.add(Direction.right);
-        }else{
-            direction.add(Direction.left);
-        }
-        return direction;
+    private Direction[] RandomDecision() {
+        int rand = randomPeer.nextInt(4);
+        Direction[] directions = new Direction[1];
+        directions[0] = Direction.values()[rand];
+        return directions;
     }
+
+    public enum Direction {
+        up, down, right, left
+    }
+
 }
