@@ -25,6 +25,7 @@ public class GameMap {
 
         //Agent
         Point agentPos = new Point(0, length - 1);
+        agent = new Agent(agentPos,w,l);
         cells[0][length - 1] = new Cell(agentPos);
         cells[0][length - 1].addEvent(Cell.Event.agent);
         lockedPoints.add(agentPos);
@@ -174,7 +175,7 @@ public class GameMap {
                 for (Cell.Event event :mycells[j][i].getEvents()) {
 
                         if (mycells[j][i].getEvents().contains(Cell.Event.agent)) {
-                            String direction = agent.getDirection();
+                            String direction = this.getAgent().getDirection();
                             if("up".equals(direction)){
                                 dangers = dangers + "^";
                             }else if("down".equals(direction)){

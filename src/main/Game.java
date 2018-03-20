@@ -22,7 +22,7 @@ class Game {
         //boucle de jeu principale
         while (!fin) {
             //L'agent choisit une action
-            ComputedDecision compute = new ComputedDecision(map);
+            ComputedDecision compute = new ComputedDecision(map.getCells(),agent.getKnownCells(),agent.position);
             ArrayList<String> directions = compute.takeDecision();
             // tant qu'il reste une direction à prendre on avance
             for(String direction : directions){
@@ -42,6 +42,9 @@ class Game {
                    TimeUnit.SECONDS.sleep(1);
                }
                fin = checkEnd(map);
+               if(!fin){
+                   agent.addKnownAndSupposedCells(map.getAgent());
+               }
             }
             //check condition de sortie
             if (fin) {
@@ -86,12 +89,8 @@ class Game {
 
     public static boolean checkEnd(GameMap map){
         boolean end = false;
-        ArrayList<Cell> deads = map.getPits();
-        deads.add(map.getWumpus());
-        for(Cell dead: deads){
-            if(map.getAgent().position.equals(dead.position)){
-                end = true;
-            }
+        if(map.getAgent().getEvents().contains(Cell.Event.wumpus)||map.getAgent().getEvents().contains(Cell.Event.pit)) {
+            end = true;
         }
         return end;
     }

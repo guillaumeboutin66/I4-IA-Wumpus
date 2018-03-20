@@ -13,7 +13,6 @@ package main;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Agent extends Cell {
 
