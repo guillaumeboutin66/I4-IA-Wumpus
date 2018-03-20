@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class Agent extends Cell {
 
     private boolean Shoot;
-    private String Direction;
+    private Direction direction;
     private Cell[][] knownCells;
     private Cell[][] supposedCells;
     private Cell lastCell;
@@ -25,7 +25,7 @@ public class Agent extends Cell {
     public Agent(Point p, int weight, int height) {
         super(p);
         
-        this.Direction = "up";
+        this.direction = Direction.up;
         this.Shoot = true;
 
         knownCells = new Cell[weight][height];
@@ -34,17 +34,17 @@ public class Agent extends Cell {
 
     public void Walk() {
     
-        String CurrentDirection = this.Direction;
+        Direction CurrentDirection = this.direction;
         
         switch(CurrentDirection){
             
-            case "right": this.position.x +=1;
+            case right: this.position.x +=1;
                      break;
-            case "up": this.position.y -=1;
+            case up: this.position.y -=1;
                       break;
-            case "left": this.position.x -=1;
+            case left: this.position.x -=1;
                      break;
-            case "down": this.position.y +=1;
+            case down: this.position.y +=1;
                      break;
             default: System.out.println("Invalid direction"); 
                      break;
@@ -61,86 +61,86 @@ public class Agent extends Cell {
         }
     }
 
-    public ArrayList<String> allerA(String action) {
+    public ArrayList<String> allerA(Direction action) {
         ArrayList<String> listeActions = new ArrayList<>();
-        if (action.equals("right")) {
-            switch (this.Direction) {
-                case "right":
+        if (action.equals(Direction.right)) {
+            switch (this.direction) {
+                case right:
                     listeActions.add("walk");
                     break;
-                case "up":
+                case up:
                     listeActions.add("turn_right");
                     listeActions.add("walk");
                     break;
-                case "left":
+                case left:
                     listeActions.add("turn_right");
                     listeActions.add("turn_right");
                     listeActions.add("walk");
                     break;
-                case "down":
+                case down:
                     listeActions.add("turn_left");
                     listeActions.add("walk");
                     break;
 
             }
         }else
-        if(action.equals("left")){
-            switch (this.Direction) {
-                case "left":
+        if(action.equals(Direction.left)){
+            switch (this.direction) {
+                case left:
                     listeActions.add("walk");
                     break;
-                case "down":
+                case down:
                     listeActions.add("turn_right");
                     listeActions.add("walk");
                     break;
-                case "right":
+                case right:
                     listeActions.add("turn_right");
                     listeActions.add("turn_right");
                     listeActions.add("walk");
                     break;
-                case "up":
+                case up:
                     listeActions.add("turn_left");
                     listeActions.add("walk");
                     break;
 
             }
         }else
-        if(action.equals("up")){
-            switch (this.Direction) {
-                case "up":
+        if(action.equals(Direction.up)){
+            switch (this.direction) {
+                case up:
                     listeActions.add("walk");
                     break;
-                case "left":
+                case left:
                     listeActions.add("turn_right");
                     listeActions.add("walk");
                     break;
-                case "down":
+                case down:
                     listeActions.add("turn_right");
                     listeActions.add("turn_right");
                     listeActions.add("walk");
                     break;
-                case "right":
+                case right:
                     listeActions.add("turn_left");
                     listeActions.add("walk");
                     break;
 
             }
         }else
-        if(action.equals("down")){
-            switch (this.Direction) {
-                case "down":
+        if(action.equals(Direction.down)){
+            switch (this.direction) {
+                case down:
                     listeActions.add("walk");
                     break;
-                case "right":
+                case right:
                     listeActions.add("turn_right");
                     listeActions.add("walk");
                     break;
-                case "up":
+                case up:
                     listeActions.add("turn_right");
                     listeActions.add("turn_right");
                     listeActions.add("walk");
                     break;
-                case "left":
+                case left:
                     listeActions.add("turn_left");
                     listeActions.add("walk");
                     break;
@@ -154,30 +154,30 @@ public class Agent extends Cell {
 
     public void Turn(boolean TurnAction){
         
-        String InitialDirection = this.getDirection();
+        Direction InitialDirection = this.getDirection();
 
         //Turn Left
         if (TurnAction == true) {
             
-            if(InitialDirection == "down"){
+            if(InitialDirection == Direction.down){
 
-                this.setDirection("right");
+                this.setDirection(Direction.right);
 
             }
             else{
-                if(InitialDirection == "right"){
+                if(InitialDirection == Direction.right){
 
-                    this.setDirection("up");
+                    this.setDirection(Direction.up);
 
                 }else{
 
-                    if(InitialDirection == "up"){
+                    if(InitialDirection == Direction.up){
 
-                        this.setDirection("left");
+                        this.setDirection(Direction.left);
 
                     }else{
 
-                        this.setDirection("down");
+                        this.setDirection(Direction.down);
 
                     }
                 }
@@ -185,25 +185,25 @@ public class Agent extends Cell {
         }
         else /*if(TurnAction == false)*/ {
 
-            if(InitialDirection == "down"){
+            if(InitialDirection == Direction.down){
 
-                this.setDirection("left");
+                this.setDirection(Direction.left);
 
             }
             else{
-                if(InitialDirection == "left"){
+                if(InitialDirection == Direction.left){
 
-                    this.setDirection("up");
+                    this.setDirection(Direction.up);
 
                 }else{
 
-                    if(InitialDirection == "up"){
+                    if(InitialDirection == Direction.up){
 
-                        this.setDirection("right");
+                        this.setDirection(Direction.right);
 
                     }else{
 
-                        this.setDirection("down");
+                        this.setDirection(Direction.down);
 
                     }
                 }
@@ -213,17 +213,17 @@ public class Agent extends Cell {
 
      public boolean UseWeapon(Cell monster) {
          
-        String CurrentDirection = this.Direction;
+        Direction CurrentDirection = this.direction;
         
         switch(CurrentDirection){
             
-            case "right":   if(this.position.y == monster.position.y && monster.position.x > this.position.x){ this.setShoot(false); return true;};
+            case right:   if(this.position.y == monster.position.y && monster.position.x > this.position.x){ this.setShoot(false); return true;};
                      break;
-            case "up":  if(this.position.x == monster.position.x && monster.position.y > this.position.y){ this.setShoot(false); return true;};
+            case up:  if(this.position.x == monster.position.x && monster.position.y > this.position.y){ this.setShoot(false); return true;};
                      break;
-            case "left": if(this.position.y == monster.position.y && monster.position.x < this.position.x){ this.setShoot(false); return true;};
+            case left: if(this.position.y == monster.position.y && monster.position.x < this.position.x){ this.setShoot(false); return true;};
                      break;
-            case "down": if(this.position.x == monster.position.x && monster.position.y < this.position.y){ this.setShoot(false); return true;};
+            case down: if(this.position.x == monster.position.x && monster.position.y < this.position.y){ this.setShoot(false); return true;};
                      break;
             default: System.out.println("Invalid direction"); 
                      break;
@@ -313,12 +313,12 @@ public class Agent extends Cell {
         this.Shoot = Shoot;
     }
 
-    public String getDirection() {
-        return Direction;
+    public Direction getDirection() {
+        return direction;
     }
 
-    public void setDirection(String Direction) {
-        this.Direction = Direction;
+    public void setDirection(Direction direction) {
+        this.direction = direction;
     }
 
     public Cell[][] getSupposedCells() {

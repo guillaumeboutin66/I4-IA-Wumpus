@@ -4,6 +4,7 @@ package main;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
+import main.Direction;
 
 class Game {
     //initialisation de la map
@@ -23,14 +24,14 @@ class Game {
         while (!fin) {
             //L'agent choisit une action
             ComputedDecision compute = new ComputedDecision(map.getCells(),agent.getKnownCells(),agent.position);
-            ArrayList<String> directions = compute.takeDecision();
+            Direction[] directions = compute.takeDecision();
             // tant qu'il reste une direction à prendre on avance
-            for(String direction : directions){
+            for(Direction direction : directions){
                ArrayList<String> actions = agent.allerA(direction);
-               String nextAction = actions.get(0);
+//               String nextAction = actions.get(0);
                boolean legal = true;
                for(String action :actions){
-                       if(("walk".equals(nextAction))){
+                       if(("walk".equals(action))){
                            legal = isDeplacementValid(agent,map);
                        } //dire au joueur qu'il a heurté un mur
                    if(legal){
@@ -55,31 +56,31 @@ class Game {
 
     public static boolean isDeplacementValid(Agent agent,GameMap map){
         boolean valid = true;
-            Point nextCellCoord = simuleDeplacement(agent);
-            if(nextCellCoord.x>map.getWidth()||
-                    nextCellCoord.x<0||
-                    nextCellCoord.y>map.getLength()||
-                    nextCellCoord.y<0){
-                valid = false;
-            }
-            return valid;
+        Point nextCellCoord = simuleDeplacement(agent);
+        if(nextCellCoord.x>map.getWidth()-1||
+                nextCellCoord.x<0||
+                nextCellCoord.y>map.getLength()-1||
+                nextCellCoord.y<0){
+            valid = false;
+        }
+        return valid;
     }
 
     public static Point simuleDeplacement(Agent agent){
 
         Point similusPosition = new Point();
         similusPosition.setLocation(agent.position);
-        String CurrentDirection = agent.getDirection();
+        Direction currentDirection = agent.getDirection();
 
-        switch(CurrentDirection){
+        switch(currentDirection){
 
-            case "right": similusPosition.x +=1;
+            case right: similusPosition.x +=1;
                 break;
-            case "up": similusPosition.y +=1;
+            case up: similusPosition.y -=1;
                 break;
-            case "left": similusPosition.x -=1;
+            case left: similusPosition.x -=1;
                 break;
-            case "down": similusPosition.y -=1;
+            case down: similusPosition.y +=1;
                 break;
             default: System.out.println("Invalid direction");
                 break;
@@ -89,6 +90,7 @@ class Game {
 
     public static boolean checkEnd(GameMap map){
         boolean end = false;
+        System.out.println(map.getAgent().toString());
         if(map.getAgent().getEvents().contains(Cell.Event.wumpus)||map.getAgent().getEvents().contains(Cell.Event.pit)) {
             end = true;
         }

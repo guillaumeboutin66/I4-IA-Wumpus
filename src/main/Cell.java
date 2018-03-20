@@ -38,6 +38,10 @@ public class Cell {
         }
     }
 
+    public void clearEvent(){
+        events.clear();
+    }
+
     public Boolean isDangerous(){
         return deadly;
     }

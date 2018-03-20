@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Random;
+import main.Direction;
 
 /**
  * Created by Azuro on 14/12/2017.
@@ -24,20 +25,12 @@ public class ComputedDecision {
         this.playerPosition = playerPosition;
     }
 
-    public ArrayList<String> takeDecision() {
+    public Direction[] takeDecision() {
         //maybe check first on a low radius, then increse it ?
         //Point targetPosition = findCell(5, knownCases[playerPosition.x][playerPosition.y]);
 
         //return toDirections(AStart(targetCell, playerPosition));
-        ArrayList <String> directions = new ArrayList<>();
-        directions.add("right");
-        directions.add("right");
-        directions.add("left");
-        directions.add("up");
-        directions.add("up");
-        directions.add("right");
-        directions.add("right");
-        return directions;
+        return this.randomDecision();
     }
 
     private Point findCell(int radius, Cell cell) {
@@ -94,8 +87,8 @@ public class ComputedDecision {
         return null;
     }
 
-    private ArrayList<String> toDirections(ArrayList<Point> path) {
-        ArrayList<String> directions = new ArrayList<String>();
+    private Direction[] toDirections(ArrayList<Point> path) {
+        ArrayList<Direction> directions = new ArrayList<Direction>();
         for (Point point : path) {
             if (point.y > playerPosition.y) {
                 directions.add(Direction.up);
@@ -107,16 +100,15 @@ public class ComputedDecision {
                 directions.add(Direction.left);
             }
         }
-
-        return directions;
+        return directions.toArray(new Direction[directions.size()]);
     }
 
-    /*
-    private Direction[] RandomDecision() {
+
+    private Direction[] randomDecision() {
         int rand = randomPeer.nextInt(4);
         Direction[] directions = new Direction[1];
         directions[0] = Direction.values()[rand];
         return directions;
-    }*/
+    }
 
 }

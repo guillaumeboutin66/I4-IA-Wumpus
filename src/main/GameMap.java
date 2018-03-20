@@ -175,12 +175,12 @@ public class GameMap {
                 for (Cell.Event event :mycells[j][i].getEvents()) {
 
                         if (mycells[j][i].getEvents().contains(Cell.Event.agent)) {
-                            String direction = this.getAgent().getDirection();
-                            if("up".equals(direction)){
+                            Direction direction = this.getAgent().getDirection();
+                            if(Direction.up == direction){
                                 dangers = dangers + "^";
-                            }else if("down".equals(direction)){
+                            }else if(Direction.down == direction){
                                 dangers = dangers + "v";
-                            }else if("left".equals(direction)){
+                            }else if(Direction.left == direction){
                                 dangers = dangers + "<";
                             }else {
                                 dangers = dangers + ">";
@@ -320,7 +320,11 @@ public class GameMap {
     }
 
     public void refreshAgent(Agent a){
-        cells[a.position.x][a.position.y].addEvent(Cell.Event.agent);
         this.agent=a;
+        this.agent.clearEvent();
+        for (Cell.Event event:cells[a.position.x][a.position.y].getEvents()) {
+            this.agent.addEvent(event);
+        }
+        cells[a.position.x][a.position.y].addEvent(Cell.Event.agent);
     }
 }
