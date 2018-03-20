@@ -13,6 +13,14 @@ public class Cell {
         position = pos;
     }
 
+    public Point getPosition() {
+        return position;
+    }
+
+    public void setPosition(Point position) {
+        this.position = position;
+    }
+
     @Override
     public String toString(){
         return "["+this.position.x+", "+this.position.y+"]/"+ getEvents().toString();
@@ -41,5 +49,8 @@ public class Cell {
         smell,
         wind,
         agent
+    }
+    public void removeEvent(Event e){
+        this.events.remove(e);
     }
 }

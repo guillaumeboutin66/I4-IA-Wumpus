@@ -13,17 +13,21 @@ public class GameMap {
     private int length;
     private Cell[][] cells;
     private ArrayList<Point> lockedPoints = new ArrayList<Point>();
+    private Agent agent;
 
-    public GameMap(int w, int l){
+
+
+    public GameMap(int w, int l) {
         width = w;
         length = l;
 
         cells = new Cell[width][length];
 
         //Agent
-        Point agentPos = new Point(0,length-1);
-        cells[0][length-1] = new Cell(agentPos);
-        cells[0][length-1].addEvent(Cell.Event.agent);
+        Point agentPos = new Point(0, length - 1);
+        agent = new Agent(agentPos,w,l);
+        cells[0][length - 1] = new Cell(agentPos);
+        cells[0][length - 1].addEvent(Cell.Event.agent);
         lockedPoints.add(agentPos);
 
         // Wumpus
@@ -145,7 +149,6 @@ public class GameMap {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 
-
         // Map découverte
         JPanel panelGame = new JPanel(new GridLayout(getWidth(),getLength())); // on n'a pas besoin de mettre le nombre de lignes si on donne un nombre de colonnes
         JPanel panelPlayer = new JPanel(new GridLayout(getWidth(),getLength())); // on n'a pas besoin de mettre le nombre de lignes si on donne un nombre de colonnes
@@ -172,7 +175,16 @@ public class GameMap {
                 for (Cell.Event event :mycells[j][i].getEvents()) {
 
                         if (mycells[j][i].getEvents().contains(Cell.Event.agent)) {
-                            dangers = dangers + "A";
+                            String direction = this.getAgent().getDirection();
+                            if("up".equals(direction)){
+                                dangers = dangers + "^";
+                            }else if("down".equals(direction)){
+                                dangers = dangers + "v";
+                            }else if("left".equals(direction)){
+                                dangers = dangers + "<";
+                            }else {
+                                dangers = dangers + ">";
+                            }
                             celluleGame.setBackground(Color.GREEN);
                             cellulePlayer.setBackground(Color.GREEN);
                         }
@@ -272,10 +284,43 @@ public class GameMap {
                     }
                 }
                 // Ajout du player
+                if(dangers.equals("")){
+                    dangers = "  ";
+                }else if(dangers.equals("A")){
+                    dangers = "A ";
+                }else if(dangers.equals("G")){
+                    dangers = "G ";
+                }else if(dangers.equals("I")){
+                    dangers = "I ";
+                }else if(dangers.equals("P")){
+                    dangers = "P ";
+                }else if(dangers.equals("S")){
+                    dangers = "S ";
+                }else if(dangers.equals("GIGI")){
+                    dangers = "GI";
+                }else if(dangers.equals("SISI")){
+                    dangers = "SI";
+                }else if(dangers.equals("WIWI")){
+                    dangers = "WI";
+                }else if(dangers.equals("ASAS")){
+                    dangers = "AS";
+                }else if(dangers.equals("AIAI")){
+                    dangers = "AI";
+                }
                 System.out.print("|  "+dangers+"  ");
 
             }
             System.out.println("| \n");
         }
+    }
+
+
+    public Agent getAgent() {
+        return agent;
+    }
+
+    public void refreshAgent(Agent a){
+        cells[a.position.x][a.position.y].addEvent(Cell.Event.agent);
+        this.agent=a;
     }
 }

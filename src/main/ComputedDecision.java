@@ -24,12 +24,20 @@ public class ComputedDecision {
         this.playerPosition = playerPosition;
     }
 
-    public Direction[] takeDecision() {
+    public ArrayList<String> takeDecision() {
         //maybe check first on a low radius, then increse it ?
-        Point targetPosition = findCell(5, knownCases[playerPosition.x][playerPosition.y]);
+        //Point targetPosition = findCell(5, knownCases[playerPosition.x][playerPosition.y]);
 
         //return toDirections(AStart(targetCell, playerPosition));
-        return null;
+        ArrayList <String> directions = new ArrayList<>();
+        directions.add("right");
+        directions.add("right");
+        directions.add("left");
+        directions.add("up");
+        directions.add("up");
+        directions.add("right");
+        directions.add("right");
+        return directions;
     }
 
     private Point findCell(int radius, Cell cell) {
@@ -86,32 +94,29 @@ public class ComputedDecision {
         return null;
     }
 
-    private Direction[] toDirections(ArrayList<Point> path) {
-        ArrayList<Direction> directions = new ArrayList<Direction>();
+    private ArrayList<String> toDirections(ArrayList<Point> path) {
+        ArrayList<String> directions = new ArrayList<String>();
         for (Point point : path) {
             if (point.y > playerPosition.y) {
-                direction.add(Direction.up);
+                directions.add(Direction.up);
             } else if (point.y < playerPosition.y) {
-                direction.add(Direction.down);
+                directions.add(Direction.down);
             } else if (point.x > playerPosition.x) {
-                direction.add(Direction.right);
+                directions.add(Direction.right);
             } else {
-                direction.add(Direction.left);
+                directions.add(Direction.left);
             }
         }
 
-        return direction.toArray(new Direction[direction.size()]);
+        return directions;
     }
 
+    /*
     private Direction[] RandomDecision() {
         int rand = randomPeer.nextInt(4);
         Direction[] directions = new Direction[1];
         directions[0] = Direction.values()[rand];
         return directions;
-    }
-
-    public enum Direction {
-        up, down, right, left
-    }
+    }*/
 
 }
