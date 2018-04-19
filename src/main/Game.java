@@ -17,7 +17,7 @@ class Game {
         boolean fin = false;
         System.out.println("Wumpus Game");
 
-        map.generate();
+        InterfaceGame interfaceGame = new InterfaceGame(map);
         Agent agent = map.getAgent();
 
         //boucle de jeu principale
@@ -38,7 +38,8 @@ class Game {
                        map.getCells()[agent.position.x][agent.position.y].removeEvent(Cell.Event.agent);
                        agent.move(action);
                        map.refreshAgent(agent);
-                       map.generate();
+                       interfaceGame.refreshGame2(map);
+                       interfaceGame.refreshPlayer(map);
                    }
                    TimeUnit.SECONDS.sleep(1);
                }
