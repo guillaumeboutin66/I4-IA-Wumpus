@@ -6,7 +6,6 @@ package main;
  * and open the template in the editor.
  */
 /**
- *
  * @author Erik
  */
 
@@ -24,7 +23,7 @@ public class Agent extends Cell {
 
     public Agent(Point p, int weight, int height) {
         super(p);
-        
+
         this.direction = Direction.up;
         this.Shoot = true;
 
@@ -33,22 +32,27 @@ public class Agent extends Cell {
     }
 
     public void Walk() {
-    
+
         Direction CurrentDirection = this.direction;
-        
-        switch(CurrentDirection){
-            
-            case right: this.position.x +=1;
-                     break;
-            case up: this.position.y -=1;
-                      break;
-            case left: this.position.x -=1;
-                     break;
-            case down: this.position.y +=1;
-                     break;
-            default: System.out.println("Invalid direction"); 
-                     break;
-        }    
+
+        switch (CurrentDirection) {
+
+            case right:
+                this.position.x += 1;
+                break;
+            case up:
+                this.position.y -= 1;
+                break;
+            case left:
+                this.position.x -= 1;
+                break;
+            case down:
+                this.position.y += 1;
+                break;
+            default:
+                System.out.println("Invalid direction");
+                break;
+        }
     }
 
     public void move(String action) {
@@ -56,7 +60,7 @@ public class Agent extends Cell {
             Turn(false);
         } else if (action.equals("turn_left")) {
             Turn(true);
-        } else if (action.equals("walk")) {
+        } else if (action.equals("walk")){
             Walk();
         }
     }
@@ -83,8 +87,7 @@ public class Agent extends Cell {
                     break;
 
             }
-        }else
-        if(action.equals(Direction.left)){
+        } else if (action.equals(Direction.left)) {
             switch (this.direction) {
                 case left:
                     listeActions.add("walk");
@@ -104,8 +107,7 @@ public class Agent extends Cell {
                     break;
 
             }
-        }else
-        if(action.equals(Direction.up)){
+        } else if (action.equals(Direction.up)) {
             switch (this.direction) {
                 case up:
                     listeActions.add("walk");
@@ -125,8 +127,7 @@ public class Agent extends Cell {
                     break;
 
             }
-        }else
-        if(action.equals(Direction.down)){
+        } else if (action.equals(Direction.down)) {
             switch (this.direction) {
                 case down:
                     listeActions.add("walk");
@@ -151,86 +152,103 @@ public class Agent extends Cell {
     }
 
 
+    public void Turn(boolean TurnAction) {
 
-    public void Turn(boolean TurnAction){
-        
         Direction InitialDirection = this.getDirection();
 
         //Turn Left
         if (TurnAction == true) {
-            
-            if(InitialDirection == Direction.down){
+
+            if (InitialDirection == Direction.down) {
 
                 this.setDirection(Direction.right);
 
-            }
-            else{
-                if(InitialDirection == Direction.right){
+            } else {
+                if (InitialDirection == Direction.right) {
 
                     this.setDirection(Direction.up);
 
-                }else{
+                } else {
 
-                    if(InitialDirection == Direction.up){
+                    if (InitialDirection == Direction.up) {
 
                         this.setDirection(Direction.left);
 
-                    }else{
+                    } else {
 
                         this.setDirection(Direction.down);
 
                     }
                 }
             }
-        }
-        else /*if(TurnAction == false)*/ {
+        } else /*if(TurnAction == false)*/ {
 
-            if(InitialDirection == Direction.down){
+            if (InitialDirection == Direction.down) {
 
                 this.setDirection(Direction.left);
 
-            }
-            else{
-                if(InitialDirection == Direction.left){
+            } else {
+                if (InitialDirection == Direction.left) {
 
                     this.setDirection(Direction.up);
 
-                }else{
+                } else {
 
-                    if(InitialDirection == Direction.up){
+                    if (InitialDirection == Direction.up) {
 
                         this.setDirection(Direction.right);
 
-                    }else{
+                    } else {
 
                         this.setDirection(Direction.down);
 
                     }
                 }
-            }       
-        }    
+            }
+        }
     }
 
-     public boolean UseWeapon(Cell monster) {
-         
+    public boolean UseWeapon(Cell monster) {
+
         Direction CurrentDirection = this.direction;
-        
-        switch(CurrentDirection){
-            
-            case right:   if(this.position.y == monster.position.y && monster.position.x > this.position.x){ this.setShoot(false); return true;};
-                     break;
-            case up:  if(this.position.x == monster.position.x && monster.position.y > this.position.y){ this.setShoot(false); return true;};
-                     break;
-            case left: if(this.position.y == monster.position.y && monster.position.x < this.position.x){ this.setShoot(false); return true;};
-                     break;
-            case down: if(this.position.x == monster.position.x && monster.position.y < this.position.y){ this.setShoot(false); return true;};
-                     break;
-            default: System.out.println("Invalid direction"); 
-                     break;
+
+        switch (CurrentDirection) {
+
+            case right:
+                if (this.position.y == monster.position.y && monster.position.x > this.position.x) {
+                    this.setShoot(false);
+                    return true;
+                }
+                ;
+                break;
+            case up:
+                if (this.position.x == monster.position.x && monster.position.y > this.position.y) {
+                    this.setShoot(false);
+                    return true;
+                }
+                ;
+                break;
+            case left:
+                if (this.position.y == monster.position.y && monster.position.x < this.position.x) {
+                    this.setShoot(false);
+                    return true;
+                }
+                ;
+                break;
+            case down:
+                if (this.position.x == monster.position.x && monster.position.y < this.position.y) {
+                    this.setShoot(false);
+                    return true;
+                }
+                ;
+                break;
+            default:
+                System.out.println("Invalid direction");
+                break;
         }
 
-         return false;
-     }
+        return false;
+    }
 
     public boolean isShoot() {
         return Shoot;
@@ -238,32 +256,35 @@ public class Agent extends Cell {
 
     /**
      * Do both add known and supposed Cell
+     *
      * @param currentCell
      */
-    public void addKnownAndSupposedCells(Cell currentCell){
+    public void addKnownAndSupposedCells(Cell currentCell) {
         pushKnownCell(currentCell);
         addSupposedCells(currentCell);
     }
 
     /**
      * Add at the correct position in the knownCells array the current cell
+     *
      * @param currentCell
      */
-    public void pushKnownCell(Cell currentCell){
+    public void pushKnownCell(Cell currentCell) {
         knownCells[currentCell.position.x][currentCell.position.y] = currentCell;
     }
 
     /**
      * Check if the cell send
+     *
      * @param currentCell
      */
-    public void addSupposedCells(Cell currentCell){
+    public void addSupposedCells(Cell currentCell) {
         /* In case the current cell contains wind event */
-        if(currentCell.getEvents().contains(Cell.Event.wind)){
+        if (currentCell.getEvents().contains(Cell.Event.wind)) {
             checkingSupposedCells(currentCell, Cell.Event.pit);
         }
-         /* In case the current cell contains smell event */
-        if(currentCell.getEvents().contains(Cell.Event.smell)){
+        /* In case the current cell contains smell event */
+        if (currentCell.getEvents().contains(Cell.Event.smell)) {
             checkingSupposedCells(currentCell, Cell.Event.wumpus);
         }
     }
@@ -271,39 +292,41 @@ public class Agent extends Cell {
     /**
      * Will add suspicious cells if they are in the limit of the map,
      * and if they are not in the knownCells array
+     *
      * @param currentCell
      * @param event
      */
-    private void checkingSupposedCells(Cell currentCell, Cell.Event event){
+    private void checkingSupposedCells(Cell currentCell, Cell.Event event) {
         int xCurrentCell = currentCell.position.x;
         int yCurrentCell = currentCell.position.y;
-        if(xCurrentCell > 0 && knownCells[xCurrentCell-1][yCurrentCell] == null){
-            createSupposedCell(xCurrentCell-1, yCurrentCell, event);
+        if (xCurrentCell > 0 && knownCells[xCurrentCell - 1][yCurrentCell] == null) {
+            createSupposedCell(xCurrentCell - 1, yCurrentCell, event);
         }
-        if(yCurrentCell > 0 && knownCells[xCurrentCell][yCurrentCell-1] == null){
-            createSupposedCell(xCurrentCell, yCurrentCell-1, event);
+        if (yCurrentCell > 0 && knownCells[xCurrentCell][yCurrentCell - 1] == null) {
+            createSupposedCell(xCurrentCell, yCurrentCell - 1, event);
         }
-        if(xCurrentCell < knownCells.length -1 && knownCells[xCurrentCell+1][yCurrentCell] == null){
-            createSupposedCell(xCurrentCell+1, yCurrentCell, event);
+        if (xCurrentCell < knownCells.length - 1 && knownCells[xCurrentCell + 1][yCurrentCell] == null) {
+            createSupposedCell(xCurrentCell + 1, yCurrentCell, event);
         }
-        if(yCurrentCell < knownCells[0].length -1 && knownCells[xCurrentCell][yCurrentCell+1] == null){
-            createSupposedCell(xCurrentCell, yCurrentCell+1, event);
+        if (yCurrentCell < knownCells[0].length - 1 && knownCells[xCurrentCell][yCurrentCell + 1] == null) {
+            createSupposedCell(xCurrentCell, yCurrentCell + 1, event);
         }
     }
 
     /**
      * Create a new cell into suspiciousCells array if not exist, else push the event if it exists,
      * but only if the cell doesn't contain the event
+     *
      * @param supposedX
      * @param supposedY
      * @param event
      */
-    private void createSupposedCell(int supposedX, int supposedY, Cell.Event event){
-        if (supposedCells[supposedX][supposedY] == null){
-            supposedCells[supposedX][supposedY] = new Cell(new Point(supposedX,supposedY));
+    private void createSupposedCell(int supposedX, int supposedY, Cell.Event event) {
+        if (supposedCells[supposedX][supposedY] == null) {
+            supposedCells[supposedX][supposedY] = new Cell(new Point(supposedX, supposedY));
             supposedCells[supposedX][supposedY].addEvent(event);
         } else {
-            if(!supposedCells[supposedX][supposedY].getEvents().contains(event)){
+            if (!supposedCells[supposedX][supposedY].getEvents().contains(event)) {
                 supposedCells[supposedX][supposedY].addEvent(event);
             }
         }

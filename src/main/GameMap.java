@@ -14,6 +14,7 @@ public class GameMap {
     private Cell[][] cells;
     private ArrayList<Point> lockedPoints = new ArrayList<Point>();
     private Agent agent;
+    JFrame frame = new JFrame("Wumpus Game");
 
 
 
@@ -144,7 +145,6 @@ public class GameMap {
 
         Cell[][] mycells = getCells();
 
-        JFrame frame = new JFrame("Wumpus Game");
         //frame.setSize(800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -216,33 +216,6 @@ public class GameMap {
                         cellulePlayer.add(jlabelPlayer);
 
                 }
-                /*if(mycells[j][i].getEvents().isEmpty()){
-                    celluleGame.setBackground(Color.WHITE);
-                    cellulePlayer.setBackground(Color.BLACK);
-                }else if(mycells[j][i].getEvents().contains(Cell.Event.agent)){
-                    celluleGame.setBackground(Color.GREEN);
-                    JLabel jlabelGame = new JLabel("A");
-                    celluleGame.add(jlabelGame);
-                    cellulePlayer.setBackground(Color.GREEN);
-                    JLabel jlabelPlayer = new JLabel("A");
-                    cellulePlayer.add(jlabelPlayer);
-                }else if(mycells[j][i].getEvents().contains(Cell.Event.pit)){
-                    celluleGame.setBackground(Color.YELLOW);
-                    JLabel jlabelCelluleGame = new JLabel("P");
-                    celluleGame.add(jlabelCelluleGame);
-                    cellulePlayer.setBackground(Color.BLACK);
-                    JLabel jlabelCellulePlayer = new JLabel("P");
-                    cellulePlayer.add(jlabelCellulePlayer);
-                }else if(mycells[j][i].getEvents().contains(Cell.Event.wumpus)){
-                    celluleGame.setBackground(Color.RED);
-                    JLabel jlabelCelluleGame = new JLabel("W");
-                    celluleGame.add(jlabelCelluleGame);
-                    cellulePlayer.setBackground(Color.BLACK);
-                    JLabel jlabelCellulePlayer = new JLabel("W");
-                    cellulePlayer.add(jlabelCellulePlayer);
-                }*/
-
-                // Ajout de la cellule dans une liste de cellules
                 panelGame.add(celluleGame);
                 panelPlayer.add(cellulePlayer);
 
@@ -319,6 +292,11 @@ public class GameMap {
         return agent;
     }
 
+    public void refreshMap(){
+        frame.invalidate();
+        frame.validate();
+        frame.repaint();
+    }
     public void refreshAgent(Agent a){
         this.agent=a;
         this.agent.clearEvent();
