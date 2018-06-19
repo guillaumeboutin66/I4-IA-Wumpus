@@ -139,9 +139,7 @@ public class AlgoA {
 
         for(int j=0;j<range;++j){
             for(int i=0;i<range;++i){
-                System.out.println("i : "+i+" j : "+j);
                 grid[i][j] = new Cellule(i, j);
-                System.out.println("Cellule : "+grid[i][j]);
                 grid[i][j].heuristicCost = Math.abs(i-endI)+Math.abs(j-endJ);
             }
         }
@@ -191,6 +189,7 @@ public class AlgoA {
         for(Path path: pathFind){
             pathPointFind.add(new Point(path.x, path.y));
         }
+        Collections.reverse(pathPointFind);
         return pathPointFind;
     }
 }

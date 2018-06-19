@@ -3,6 +3,7 @@ package main;
 
 import java.awt.*;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import main.Direction;
 
@@ -21,6 +22,7 @@ class Game {
 
         interfaceGame = new InterfaceGame(map);
         Agent agent = map.getAgent();
+        agent.addKnownAndSupposedCells(map.getAgent());
 
         testShortPath(map);
 
@@ -105,8 +107,8 @@ class Game {
             for (int j = 0; j < mycells[i].length; j++) {
                 for (Cell.Event event : mycells[j][i].getEvents()) {
                     if (event == Cell.Event.gold) {
-                        java.util.List<Point> result2 = aa.getSolution(10, 0, 9, j, i, map.getDangerousPoints());
-                        System.out.print(result2.size());
+                        List<Point> result2 = aa.getSolution(10, 0, 9, j, i, map.getDangerousPoints());
+                        System.out.print(result2);
                         interfaceGame.setBestSoluce(result2);
                     }
                 }

@@ -1,10 +1,8 @@
 package main;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Random;
+import java.awt.Point;
+import java.util.*;
+
 import main.Direction;
 
 /**
@@ -27,10 +25,17 @@ public class ComputedDecision {
 
     public Direction[] takeDecision() {
         //maybe check first on a low radius, then increse it ?
-        //Point targetPosition = findCell(5, knownCases[playerPosition.x][playerPosition.y]);
+        Point targetPosition = findCell(5, knownCases[playerPosition.x][playerPosition.y]);
 
-        //return toDirections(AStart(targetCell, playerPosition));
-        return this.randomDecision();
+        if(targetPosition != null) {
+            AlgoA aa = new AlgoA();
+            List<Point> result = aa.getSolution(10, this.playerPosition.x, this.playerPosition.y, targetPosition.x, targetPosition.y, new ArrayList<>());
+
+            return toDirections(result);
+        }else{
+            //this.randomDecision();
+            return this.randomDecision();
+        }
     }
 
     private Point findCell(int radius, Cell cell) {
@@ -87,7 +92,7 @@ public class ComputedDecision {
         return null;
     }
 
-    private Direction[] toDirections(ArrayList<Point> path) {
+    private Direction[] toDirections(List<Point> path) {
         ArrayList<Direction> directions = new ArrayList<Direction>();
         for (Point point : path) {
             if (point.y > playerPosition.y) {
