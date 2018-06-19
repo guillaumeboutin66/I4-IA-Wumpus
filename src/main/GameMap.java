@@ -13,6 +13,7 @@ public class GameMap {
     private int length;
     private Cell[][] cells;
     private ArrayList<Point> lockedPoints = new ArrayList<Point>();
+    private ArrayList<Point> dangerousPoints = new ArrayList<Point>();
     private Agent agent;
 
 
@@ -28,13 +29,14 @@ public class GameMap {
         agent = new Agent(agentPos,w,l);
         cells[0][length - 1] = new Cell(agentPos);
         cells[0][length - 1].addEvent(Cell.Event.agent);
-        lockedPoints.add(agentPos);
+         lockedPoints.add(agentPos);
 
         // Wumpus
         Point posWumpus = generatePoint(width, length, lockedPoints);
         cells[posWumpus.x][posWumpus.y] = new Cell(posWumpus);
         cells[posWumpus.x][posWumpus.y].addEvent(Cell.Event.wumpus);
         lockedPoints.add(posWumpus);
+        dangerousPoints.add(posWumpus);
 
         // Gold
         Point posGold = generatePoint(width, length, lockedPoints);
@@ -51,6 +53,7 @@ public class GameMap {
             cells[posPit.x][posPit.y] = new Cell(posPit);
             cells[posPit.x][posPit.y].addEvent(Cell.Event.pit);
             lockedPoints.add(posPit);
+            dangerousPoints.add(posPit);
         }
 
         // Fill the rest of the Map of normal Cells
@@ -138,6 +141,9 @@ public class GameMap {
 
     public ArrayList<Point> getLockedPoints() {
         return lockedPoints;
+    }
+    public ArrayList<Point> getDangerousPoints() {
+        return dangerousPoints;
     }
 
     public void generate(){
@@ -313,7 +319,6 @@ public class GameMap {
             System.out.println("| \n");
         }
     }
-
 
     public Agent getAgent() {
         return agent;

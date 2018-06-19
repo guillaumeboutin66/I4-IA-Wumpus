@@ -2,13 +2,15 @@ package main;
 
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import main.Direction;
 
 class Game {
-    //initialisation de la map
 
+    private static InterfaceGame interfaceGame = null;
+
+    //initialisation de la map
     public static void main(String[] args) throws InterruptedException {
         int weigh = 10;
         int height = 10;
@@ -17,8 +19,10 @@ class Game {
         boolean fin = false;
         System.out.println("Wumpus Game");
 
-        InterfaceGame interfaceGame = new InterfaceGame(map);
+        interfaceGame = new InterfaceGame(map);
         Agent agent = map.getAgent();
+
+        testShortPath(map);
 
         //boucle de jeu principale
         while (!fin) {
@@ -28,29 +32,25 @@ class Game {
             // tant qu'il reste une direction à prendre on avance
             for(Direction direction : directions){
                ArrayList<String> actions = agent.allerA(direction);
-//               String nextAction = actions.get(0);
                boolean legal = true;
                for(String action :actions){
-                       if(("walk".equals(action))){
-                           legal = isDeplacementValid(agent,map);
-                       } //dire au joueur qu'il a heurté un mur
+                   if(("walk".equals(action))){
+                       legal = isDeplacementValid(agent,map);
+                   } //dire au joueur qu'il a heurté un mur
                    if(legal){
                        map.getCells()[agent.position.x][agent.position.y].removeEvent(Cell.Event.agent);
-                       agent.move(action);
-                       map.refreshAgent(agent);
-                       interfaceGame.refreshGame2(map);
-                       interfaceGame.refreshPlayer(map);
+                       map.refreshAgent(agent.move(action));
+                       agent.addKnownAndSupposedCells(map.getAgent());
+
                    }
                    TimeUnit.SECONDS.sleep(1);
+                   interfaceGame.refresh(map, true);
                }
                fin = checkEnd(map);
-               if(!fin){
-                   agent.addKnownAndSupposedCells(map.getAgent());
-               }
             }
             //check condition de sortie
             if (fin) {
-                //map.endAnimation();
+                interfaceGame.endGame(map);
             }
         }
     }
@@ -96,5 +96,21 @@ class Game {
             end = true;
         }
         return end;
+    }
+
+    private static void testShortPath(GameMap map){
+        AlgoA aa = new AlgoA();
+        Cell[][] mycells = map.getCells();
+        for(int i = 0; i < mycells.length; i++) {
+            for (int j = 0; j < mycells[i].length; j++) {
+                for (Cell.Event event : mycells[j][i].getEvents()) {
+                    if (event == Cell.Event.gold) {
+                        java.util.List<Point> result2 = aa.getSolution(10, 0, 9, j, i, map.getDangerousPoints());
+                        System.out.print(result2.size());
+                        interfaceGame.setBestSoluce(result2);
+                    }
+                }
+            }
+        }
     }
 }

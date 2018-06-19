@@ -51,7 +51,7 @@ public class Agent extends Cell {
         }    
     }
 
-    public void move(String action) {
+    public Agent move(String action) {
         if (action.equals("turn_right")) {
             Turn(false);
         } else if (action.equals("turn_left")) {
@@ -59,6 +59,7 @@ public class Agent extends Cell {
         } else if (action.equals("walk")) {
             Walk();
         }
+        return this;
     }
 
     public ArrayList<String> allerA(Direction action) {
