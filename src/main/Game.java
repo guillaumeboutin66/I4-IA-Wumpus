@@ -60,6 +60,7 @@ class Game {
                 if (fin) {
                     interfaceGame.endGame(map);
                     System.out.println("Nombre de tours : "+tourCount);
+                    break;
                 }
             }
         }

@@ -200,10 +200,10 @@ public class ComputedDecision {
         for (Point point : path) {
             if (point.y < temporalPosition.y) {
                 directions.add(Direction.up);
-                temporalPosition.setLocation(temporalPosition.x, temporalPosition.y + 1);
+                temporalPosition.setLocation(temporalPosition.x, temporalPosition.y - 1);
             } else if (point.y > temporalPosition.y) {
                 directions.add(Direction.down);
-                temporalPosition.setLocation(temporalPosition.x, temporalPosition.y - 1);
+                temporalPosition.setLocation(temporalPosition.x, temporalPosition.y + 1);
             } else if (point.x > temporalPosition.x) {
                 directions.add(Direction.right);
                 temporalPosition.setLocation(temporalPosition.x - 1, temporalPosition.y);

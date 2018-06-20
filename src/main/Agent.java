@@ -331,7 +331,13 @@ public class Agent extends Cell {
         ArrayList<Point> list = new ArrayList<Point>();
         for(int i=1;i<supposedCells.length; i++){
             for(int j=0;j<supposedCells[0].length; j++){
-                if(supposedCells[i][j] != null && (supposedCells[i][j].position.x != this.position.x && supposedCells[i][j].position.y != this.position.y )){
+                if(supposedCells[i][j] != null){
+                    if((supposedCells[i][j].position.x != this.position.x && supposedCells[i][j].position.y != this.position.y )){
+                        System.out.print("Dont add X" + i + " Y" + j);
+                        System.out.print("Dont add Position X" + supposedCells[i][j].position.x + " Y" + supposedCells[i][j].position.y);
+
+                    }
+                    
                     list.add(new Point(supposedCells[i][j].position.x, supposedCells[i][j].position.y));   
                 }
             }
