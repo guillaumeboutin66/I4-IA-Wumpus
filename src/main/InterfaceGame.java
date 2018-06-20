@@ -1,6 +1,5 @@
 package main;
 
-import com.oracle.tools.packager.Log;
 
 import javax.swing.*;
 import java.awt.*;

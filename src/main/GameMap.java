@@ -1,6 +1,5 @@
 package main;
 
-import main.Cell;
 
 import javax.swing.*;
 import java.awt.*;

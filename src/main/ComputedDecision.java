@@ -3,7 +3,6 @@ package main;
 import java.awt.Point;
 import java.util.*;
 
-import main.Direction;
 
 /**
  * Created by Azuro on 14/12/2017.
@@ -15,10 +14,12 @@ public class ComputedDecision {
     int knownMaxWidth = 0;
     Cell[][] knownCases;
     Cell[][] map;
+    Agent agent;
     Point playerPosition;
 
-    public ComputedDecision(Cell[][] map, Cell[][] knownCases, Point playerPosition) {
-        this.map = map;
+    public ComputedDecision(GameMap map, Cell[][] knownCases, Point playerPosition) {
+        this.map = map.getCells();
+        this.agent = map.getAgent();
         this.knownCases = knownCases;
         this.playerPosition = playerPosition;
     }
@@ -26,18 +27,106 @@ public class ComputedDecision {
     public Direction[] takeDecision() {
         //maybe check first on a low radius, then increse it ?
         Point targetPosition = findCell(5, knownCases[playerPosition.x][playerPosition.y]);
-
+        System.out.println("Current position x:" +  this.playerPosition.x + "  y:" + this.playerPosition.y);
+        System.out.println("Target position x:" +  targetPosition.x + "  y:" + targetPosition.y);
         if(targetPosition != null) {
-            AlgoA aa = new AlgoA();
-            List<Point> result = aa.getSolution(10, this.playerPosition.x, this.playerPosition.y, targetPosition.x, targetPosition.y, new ArrayList<>());
-
+            List<Point> result = AlgoA.getSolution(10, this.playerPosition.x, this.playerPosition.y, targetPosition.x, targetPosition.y, this.agent.getSupposedCellsToList());
+            
+            
+            System.out.println(result);
             return toDirections(result);
+            
         }else{
             //this.randomDecision();
-            return this.randomDecision();
+           // return this.randomDecision();
+           return null;
         }
     }
 
+
+
+    private Point findCell(int radius, Cell startCell){
+        HashSet<Cell> radiusOldCell = new HashSet<Cell>();
+        HashSet<Cell> radiusNewCell = new HashSet<Cell>();
+        radiusOldCell.add(startCell);
+        
+        for(int i = 0; i < radius; i++){
+            for (Cell mainCell : radiusOldCell) {
+                Cell cell;
+                Cell suspiciousCell;
+                if(mainCell.position.x - 1 >= 0){
+
+                    cell = knownCases[mainCell.position.x - 1][mainCell.position.y];
+                    if(cell == null){
+                        suspiciousCell = this.agent.getSupposedCells()[mainCell.position.x - 1][mainCell.position.y];
+                        if(suspiciousCell == null || (suspiciousCell != null && !suspiciousCell.isDangerous())){
+                            return new Point(mainCell.position.x - 1, mainCell.position.y);
+                        }else{
+                            System.out.print("NSM");
+                        }
+                    } else if (!radiusNewCell.contains(cell)){
+                        System.out.println("Cell position : X:" + mainCell.position.x + "  Y:" + mainCell.position.y);
+                        System.out.println("Cell position : X:" + cell.position.x + "  Y:" + cell.position.y);
+                        radiusNewCell.add(cell);                        
+                    }
+                }
+                
+                if(mainCell.position.x + 1 >= 0){
+
+                    cell = knownCases[mainCell.position.x + 1][mainCell.position.y];
+                    if(cell == null){
+                        suspiciousCell = this.agent.getSupposedCells()[mainCell.position.x + 1][mainCell.position.y];
+                        if(suspiciousCell == null || (suspiciousCell != null && !suspiciousCell.isDangerous())){
+                            return new Point(mainCell.position.x + 1, mainCell.position.y);
+                        }else{
+                            System.out.print("NSM");
+                        }
+                    } else if (!radiusNewCell.contains(cell)){
+                        radiusNewCell.add(cell);                        
+                    }
+                }
+                
+                if(mainCell.position.y - 1 < knownCases[0].length){
+
+                    cell = knownCases[mainCell.position.x][mainCell.position.y - 1];
+                    if(cell == null){
+                        suspiciousCell = this.agent.getSupposedCells()[mainCell.position.x][mainCell.position.y - 1];
+                        if(suspiciousCell == null || (suspiciousCell != null && !suspiciousCell.isDangerous())){
+                            return new Point(mainCell.position.x, mainCell.position.y - 1);
+                        }else{
+                            System.out.print("NSM");
+                        }
+                    } else if (!radiusNewCell.contains(cell)){
+                        radiusNewCell.add(cell);                        
+                    }
+                }
+                
+                if(mainCell.position.y + 1 < knownCases[0].length){
+
+                    cell = knownCases[mainCell.position.x][mainCell.position.y + 1];
+                    if(cell == null){
+                        suspiciousCell = this.agent.getSupposedCells()[mainCell.position.x][mainCell.position.y + 1];
+                        if(suspiciousCell == null || (suspiciousCell != null && !suspiciousCell.isDangerous())){
+                            return new Point(mainCell.position.x, mainCell.position.y + 1);
+                        }else{
+                            System.out.print("NSM");
+                        }
+                    } else if (!radiusNewCell.contains(cell)){
+                        radiusNewCell.add(cell);                        
+                    }
+                } 
+
+            }
+
+            radiusOldCell.addAll(radiusNewCell);
+            radiusNewCell.clear();
+        }
+
+        System.out.println("no case have been found in this range.");
+        return null;
+    }
+
+/*
     private Point findCell(int radius, Cell cell) {
         HashSet<Cell> radiusOldCell = new HashSet<Cell>();
         HashSet<Cell> radiusNewCell = new HashSet<Cell>();
@@ -45,9 +134,12 @@ public class ComputedDecision {
 
         for (int i = 0; i < radius; i++) {
             for (Cell suCell : radiusOldCell) {
-                Cell tmp;
+                Cell tmp = null;
                 if (suCell.position.x - 1 >= 0) {
-                    tmp = knownCases[suCell.position.x - 1][suCell.position.y];
+                    //if(this.agent.getSupposedCells()[suCell.position.x - 1][suCell.position.y] != null && !this.agent.getSupposedCells()[suCell.position.x - 1][suCell.position.y].isDangerous()){
+                        tmp = knownCases[suCell.position.x - 1][suCell.position.y];   
+                    //}
+                    
                     if (tmp == null) {
                         return new Point(suCell.position.x - 1, suCell.position.y);
                     } else if (!radiusNewCell.contains(tmp) && !radiusOldCell.contains(tmp) && !tmp.isDangerous()) {
@@ -56,8 +148,12 @@ public class ComputedDecision {
                 }
 
                 if (suCell.position.x + 1 < knownCases.length) {
-                    tmp = knownCases[suCell.position.x + 1][suCell.position.y];
-                    if (tmp == null) {
+                    
+                    //if(this.agent.getSupposedCells()[suCell.position.x + 1][suCell.position.y] != null && !this.agent.getSupposedCells()[suCell.position.x + 1][suCell.position.y].isDangerous()){
+                        tmp = knownCases[suCell.position.x + 1][suCell.position.y];
+                    //}
+                    
+                    if (tmp == null ) {
                         return new Point(suCell.position.x + 1, suCell.position.y);
                     } else if (!radiusNewCell.contains(tmp) && !radiusOldCell.contains(tmp) && !tmp.isDangerous()) {
                         radiusNewCell.add(tmp);
@@ -65,8 +161,11 @@ public class ComputedDecision {
                 }
 
                 if (suCell.position.y - 1 >= 0) {
-                    tmp = knownCases[suCell.position.x][suCell.position.y - 1];
-                    if (tmp == null) {
+                    
+                    //if(this.agent.getSupposedCells()[suCell.position.x][suCell.position.y - 1] != null && !this.agent.getSupposedCells()[suCell.position.x][suCell.position.y - 1].isDangerous()){
+                        tmp = knownCases[suCell.position.x][suCell.position.y - 1];
+                    //}
+                     if (tmp == null) {
                         return new Point(suCell.position.x, suCell.position.y - 1);
                     } else if (!radiusNewCell.contains(tmp) && !radiusOldCell.contains(tmp) && !tmp.isDangerous()) {
                         radiusNewCell.add(tmp);
@@ -74,7 +173,11 @@ public class ComputedDecision {
                 }
 
                 if (suCell.position.y + 1 < knownCases[0].length) {
-                    tmp = knownCases[suCell.position.x][suCell.position.y + 1];
+                    
+                    //if(this.agent.getSupposedCells()[suCell.position.x][suCell.position.y - 1]!= null && !this.agent.getSupposedCells()[suCell.position.x][suCell.position.y + 1 ].isDangerous()){
+                        tmp = knownCases[suCell.position.x][suCell.position.y + 1];
+                    //}
+                    
                     if (tmp == null) {
                         return new Point(suCell.position.x, suCell.position.y + 1);
                     } else if (!radiusNewCell.contains(tmp) && !radiusOldCell.contains(tmp) && !tmp.isDangerous()) {
@@ -91,17 +194,18 @@ public class ComputedDecision {
         System.out.println("no case have been found in this range.");
         return null;
     }
+*/
 
     private Direction[] toDirections(List<Point> path) {
         ArrayList<Direction> directions = new ArrayList<Direction>();
         for (Point point : path) {
-            if (point.y > playerPosition.y) {
+            if (point.y < playerPosition.y) {
                 directions.add(Direction.up);
-            } else if (point.y < playerPosition.y) {
+            } else if (point.y > playerPosition.y) {
                 directions.add(Direction.down);
             } else if (point.x > playerPosition.x) {
                 directions.add(Direction.right);
-            } else {
+            } else if (point.x < playerPosition.x) {
                 directions.add(Direction.left);
             }
         }

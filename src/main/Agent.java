@@ -326,7 +326,21 @@ public class Agent extends Cell {
         return supposedCells;
     }
 
+    public ArrayList<Point> getSupposedCellsToList() {
+        ArrayList<Point> list = new ArrayList<Point>();
+        for(int i=0;i<supposedCells.length; i++){
+            for(int j=0;j<supposedCells[0].length; j++){
+                if(supposedCells[i][j] != null){
+                    list.add(new Point(supposedCells[i][j].position.x, supposedCells[i][j].position.y));   
+                }
+            }
+        }
+        return list;
+    }
+
+    
     public Cell[][] getKnownCells() {
         return knownCells;
     }
+    
 }

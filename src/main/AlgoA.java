@@ -150,21 +150,8 @@ public class AlgoA {
            for blocked cells.
         */
         for (Point aBlocked : blocked) {
-            //setBlocked(aBlocked.x, aBlocked.y);
+            setBlocked(aBlocked.x, aBlocked.y);
         }
-
-        //Display initial map
-        System.out.println("Grid: ");
-        for(int j=0;j<range;++j){
-            for(int i=0;i<range;++i){
-                if(i==startX&&j==startY)System.out.print("A   "); //Agent
-                else if(i==endX && j==endY)System.out.print("G   ");  //Gold
-                else if(grid[i][j]!=null)System.out.printf("%-3d ", 0);
-                else System.out.print("M   ");// Mort
-            }
-            System.out.println();
-        }
-        System.out.println();
 
         AStar();
 
@@ -172,16 +159,16 @@ public class AlgoA {
 
         if(closed[endI][endJ]){
             //Trace back the path
-            System.out.println("Path: ");
+
             Cellule current = grid[endI][endJ];
-            System.out.print(current);
+
             pathFind.add(new Path(current.i, current.j));
             while(current.parent!=null){
-                System.out.print(" -> "+current.parent);
+
                 pathFind.add(new Path(current.parent.i, current.parent.j));
                 current = current.parent;
             }
-            System.out.println();
+
         }else System.out.println("No possible path");
 
 

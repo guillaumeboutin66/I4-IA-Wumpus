@@ -5,7 +5,6 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import main.Direction;
 
 class Game {
 
@@ -29,7 +28,7 @@ class Game {
         //boucle de jeu principale
         while (!fin) {
             //L'agent choisit une action
-            ComputedDecision compute = new ComputedDecision(map.getCells(),agent.getKnownCells(),agent.position);
+            ComputedDecision compute = new ComputedDecision(map,agent.getKnownCells(),agent.position);
             Direction[] directions = compute.takeDecision();
             // tant qu'il reste une direction à prendre on avance
             for(Direction direction : directions){
@@ -101,13 +100,12 @@ class Game {
     }
 
     private static void testShortPath(GameMap map){
-        AlgoA aa = new AlgoA();
         Cell[][] mycells = map.getCells();
         for(int i = 0; i < mycells.length; i++) {
             for (int j = 0; j < mycells[i].length; j++) {
                 for (Cell.Event event : mycells[j][i].getEvents()) {
                     if (event == Cell.Event.gold) {
-                        List<Point> result2 = aa.getSolution(10, 0, 9, j, i, map.getDangerousPoints());
+                        List<Point> result2 = AlgoA.getSolution(10, 0, 9, j, i, map.getDangerousPoints());
                         System.out.print(result2);
                         interfaceGame.setBestSoluce(result2);
                     }
