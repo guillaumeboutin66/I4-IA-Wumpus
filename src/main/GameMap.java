@@ -21,7 +21,24 @@ public class GameMap {
         width = w;
         length = l;
 
-        cells = new Cell[width][length];
+        JPanel p = new JPanel();
+        JTextField jWidth = new JTextField(10);
+        JTextField jLength = new JTextField(10);
+
+        p.add(new JLabel("Largeur :"));
+        p.add(jWidth);
+        p.add(new JLabel("Hauteur : "));
+        p.add(jLength);
+
+        JOptionPane.showConfirmDialog(null, p, "Wumpus, entrez la taille : ", JOptionPane.OK_CANCEL_OPTION);
+
+        width = "".equals(jWidth.getText()) ? width : Integer.parseInt(jWidth.getText());
+        length = "".equals(jLength.getText()) ? length : Integer.parseInt(jLength.getText());
+
+        cells = new Cell[length][width];
+
+        System.out.println("Width = " + width);
+        System.out.println("Length = " + length);
 
         //Agent
         Point agentPos = new Point(0, length - 1);
