@@ -26,11 +26,11 @@ public class ComputedDecision {
 
     public Direction[] takeDecision() {
         //maybe check first on a low radius, then increse it ?
-        Point targetPosition = findCell(5, knownCases[playerPosition.x][playerPosition.y]);
+        Point targetPosition = findCell(10, knownCases[playerPosition.x][playerPosition.y]);
         System.out.println("Current position x:" +  this.playerPosition.x + "  y:" + this.playerPosition.y);
         System.out.println("Target position x:" +  targetPosition.x + "  y:" + targetPosition.y);
         if(targetPosition != null) {
-            List<Point> result = AlgoA.getSolution(10, this.playerPosition.x, this.playerPosition.y, targetPosition.x, targetPosition.y, this.agent.getSupposedCellsToList());
+            List<Point> result = AlgoA.getSolution(10, 10, this.playerPosition.x, this.playerPosition.y, targetPosition.x, targetPosition.y, this.agent.getSupposedCellsToList());
             
             
             System.out.println(result);
@@ -65,13 +65,11 @@ public class ComputedDecision {
                             System.out.print("NSM");
                         }
                     } else if (!radiusNewCell.contains(cell)){
-                        System.out.println("Cell position : X:" + mainCell.position.x + "  Y:" + mainCell.position.y);
-                        System.out.println("Cell position : X:" + cell.position.x + "  Y:" + cell.position.y);
                         radiusNewCell.add(cell);                        
                     }
                 }
                 
-                if(mainCell.position.x + 1 >= 0){
+                if(mainCell.position.x + 1 < knownCases.length){
 
                     cell = knownCases[mainCell.position.x + 1][mainCell.position.y];
                     if(cell == null){
@@ -86,7 +84,7 @@ public class ComputedDecision {
                     }
                 }
                 
-                if(mainCell.position.y - 1 < knownCases[0].length){
+                if(mainCell.position.y - 1 >= 0){
 
                     cell = knownCases[mainCell.position.x][mainCell.position.y - 1];
                     if(cell == null){
@@ -198,17 +196,28 @@ public class ComputedDecision {
 
     private Direction[] toDirections(List<Point> path) {
         ArrayList<Direction> directions = new ArrayList<Direction>();
+        Point temporalPosition = new Point(playerPosition.x, playerPosition.y);
         for (Point point : path) {
-            if (point.y < playerPosition.y) {
+            if (point.y < temporalPosition.y) {
                 directions.add(Direction.up);
-            } else if (point.y > playerPosition.y) {
+                temporalPosition.setLocation(temporalPosition.x, temporalPosition.y + 1);
+            } else if (point.y > temporalPosition.y) {
                 directions.add(Direction.down);
-            } else if (point.x > playerPosition.x) {
+                temporalPosition.setLocation(temporalPosition.x, temporalPosition.y - 1);
+            } else if (point.x > temporalPosition.x) {
                 directions.add(Direction.right);
-            } else if (point.x < playerPosition.x) {
+                temporalPosition.setLocation(temporalPosition.x - 1, temporalPosition.y);
+            } else if (point.x < temporalPosition.x) {
                 directions.add(Direction.left);
+                temporalPosition.setLocation(temporalPosition.x + 1, temporalPosition.y);
             }
         }
+        
+        System.out.println("Pour aller de  : X" + playerPosition.x + " Y" + playerPosition.y + " à  la destination");
+         for(Direction direction : directions){
+             System.out.print(direction + " => ");
+         }      
+        
         return directions.toArray(new Direction[directions.size()]);
     }
 

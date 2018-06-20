@@ -251,7 +251,7 @@ public class Agent extends Cell {
      * @param currentCell
      */
     public void pushKnownCell(Cell currentCell){
-        Cell cell = new Cell(currentCell.position);
+        Cell cell = new Cell(new Point(currentCell.position.x, currentCell.position.y));
         knownCells[currentCell.position.x][currentCell.position.y] = cell;
     }
 
@@ -329,13 +329,14 @@ public class Agent extends Cell {
 
     public ArrayList<Point> getSupposedCellsToList() {
         ArrayList<Point> list = new ArrayList<Point>();
-        for(int i=0;i<supposedCells.length; i++){
+        for(int i=1;i<supposedCells.length; i++){
             for(int j=0;j<supposedCells[0].length; j++){
-                if(supposedCells[i][j] != null){
+                if(supposedCells[i][j] != null && (supposedCells[i][j].position.x != this.position.x && supposedCells[i][j].position.y != this.position.y )){
                     list.add(new Point(supposedCells[i][j].position.x, supposedCells[i][j].position.y));   
                 }
             }
         }
+        
         return list;
     }
 

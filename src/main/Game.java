@@ -56,13 +56,11 @@ class Game {
 
                }
                fin = checkEnd(map);
-
-            }
-
-            //check condition de sortie
-            if (fin) {
-                interfaceGame.endGame(map);
-                System.out.println("Nombre de tours : "+tourCount);
+                //check condition de sortie
+                if (fin) {
+                    interfaceGame.endGame(map);
+                    System.out.println("Nombre de tours : "+tourCount);
+                }
             }
         }
     }
