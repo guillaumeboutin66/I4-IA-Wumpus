@@ -251,7 +251,8 @@ public class Agent extends Cell {
      * @param currentCell
      */
     public void pushKnownCell(Cell currentCell){
-        knownCells[currentCell.position.x][currentCell.position.y] = currentCell;
+        Cell cell = new Cell(currentCell.position);
+        knownCells[currentCell.position.x][currentCell.position.y] = cell;
     }
 
     /**

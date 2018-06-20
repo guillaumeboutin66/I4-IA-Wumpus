@@ -121,10 +121,10 @@ public class AlgoA {
         }
     }
 
-    public static List<Point> getSolution(int range, int startX, int startY, int endX, int endY, List<Point> blocked){
+    public static List<Point> getSolution(int weigh, int height, int startX, int startY, int endX, int endY, List<Point> blocked){
         //Reset
-        grid = new Cellule[range][range];
-        closed = new boolean[range][range];
+        grid = new Cellule[weigh][height];
+        closed = new boolean[weigh][height];
         open = new PriorityQueue<>((Object o1, Object o2) -> {
             Cellule c1 = (Cellule)o1;
             Cellule c2 = (Cellule)o2;
@@ -137,8 +137,8 @@ public class AlgoA {
         //Set End Location
         setEndCell(endX, endY);
 
-        for(int j=0;j<range;++j){
-            for(int i=0;i<range;++i){
+        for(int j=0;j<height;++j){
+            for(int i=0;i<weigh;++i){
                 grid[i][j] = new Cellule(i, j);
                 grid[i][j].heuristicCost = Math.abs(i-endI)+Math.abs(j-endJ);
             }
